@@ -1,6 +1,10 @@
 *.class
-
-# Package Files #
 *.jar
 *.war
 *.ear
+*.iml
+
+.idea
+out
+build
+build-gradle
