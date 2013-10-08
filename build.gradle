@@ -7,14 +7,16 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.7
 
-project.ext.slf4jVersion     = '1.7.5'
-project.ext.log4jVersion     = '1.2.17'
-project.ext.jacksonVersion   = '2.2.2'
-project.ext.hazelcastVersion = '3.0.2'
-project.ext.osgiVersion      = '4.3.1'
-project.ext.reactorVersion   = '1.0.0.M3'
-project.ext.openjpaVersion   = '2.2.2'
-project.ext.hsqldbVersion    = '2.3.0'
+project.ext.slf4jVersion            = '1.7.5'
+project.ext.log4jVersion            = '1.2.17'
+project.ext.jacksonVersion          = '2.2.2'
+project.ext.hazelcastVersion        = '3.0.2'
+project.ext.osgiVersion             = '4.3.1'
+project.ext.reactorVersion          = '1.0.0.M3'
+project.ext.openjpaVersion          = '2.2.2'
+project.ext.hsqldbVersion           = '2.3.0'
+project.ext.openHftChronicleVersion = '2.0.1'
+project.ext.openHftLangVersion      = '6.0.2'
 
 // *****************************************************************************
 //
@@ -54,6 +56,8 @@ dependencies {
     compile "org.projectreactor:reactor-tcp:$reactorVersion"
     compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.apache.openjpa:openjpa:$openjpaVersion"
+    compile "net.openhft:chronicle:$openHftChronicleVersion"
+    compile "net.openhft:lang:$openHftLangVersion"
 }
 
 // *****************************************************************************
@@ -87,6 +91,15 @@ task openJpaSlf4j(dependsOn: openJpaEnhance) << {
         args      = ['slf4j']
     }
 }
+
+
+task hftChronicleIterator(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.IndexedChronicleMain'
+        classpath = project.runtimeClasspath
+    }
+}
+
 // *****************************************************************************
 //
 // *****************************************************************************
