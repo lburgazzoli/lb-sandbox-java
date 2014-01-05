@@ -5,7 +5,7 @@ import net.openhft.chronicle.ExcerptAppender;
 import net.openhft.chronicle.IndexedChronicle;
 import net.openhft.chronicle.tools.ChronicleTools;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;import java.lang.Exception;import java.lang.String;
+import org.slf4j.LoggerFactory;
 
 /**
  *

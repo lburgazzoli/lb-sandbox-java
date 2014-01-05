@@ -9,14 +9,16 @@ sourceCompatibility = 1.7
 
 project.ext.slf4jVersion            = '1.7.5'
 project.ext.log4jVersion            = '1.2.17'
-project.ext.jacksonVersion          = '2.2.2'
-project.ext.hazelcastVersion        = '3.0.2'
-project.ext.osgiVersion             = '4.3.1'
-project.ext.reactorVersion          = '1.0.0.M3'
-project.ext.openjpaVersion          = '2.2.2'
-project.ext.hsqldbVersion           = '2.3.0'
-project.ext.openHftChronicleVersion = '2.0.1'
-project.ext.openHftLangVersion      = '6.0.2'
+project.ext.jacksonVersion          = '2.3.0'
+project.ext.hazelcastVersion        = '3.1.3'
+project.ext.osgiVersion             = '5.0.0'
+project.ext.reactorVersion          = '1.0.0.RELEASE'
+project.ext.openjpaVersion          = '2.3.0'
+project.ext.hsqldbVersion           = '2.3.1'
+project.ext.openHftChronicleVersion = '2.0.2'
+project.ext.openHftLangVersion      = '6.1.1'
+project.ext.hibernateVersion        = '4.3.0.Final'
+project.ext.hikariCPVersion         = '1.2.2'
 
 // *****************************************************************************
 //
@@ -43,21 +45,24 @@ dependencies {
     compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
     compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
     compile "log4j:log4j:$log4jVersion"
-    compile "org.apache.commons:commons-lang3:3.1"
+    compile "org.apache.commons:commons-lang3:3.2"
     compile "org.osgi:org.osgi.core:$osgiVersion"
     compile "org.osgi:org.osgi.compendium:$osgiVersion"
-    compile "com.google.guava:guava:14.0.1"
+    compile "com.google.guava:guava:15.0"
     compile "com.hazelcast:hazelcast-all:$hazelcastVersion"
     compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion"
     compile "org.projectreactor:reactor-core:$reactorVersion"
     compile "org.projectreactor:reactor-tcp:$reactorVersion"
     compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.apache.openjpa:openjpa:$openjpaVersion"
     compile "net.openhft:chronicle:$openHftChronicleVersion"
     compile "net.openhft:lang:$openHftLangVersion"
+    compile "org.hibernate:hibernate-core:$hibernateVersion"
+    compile "com.zaxxer:HikariCP:$hikariCPVersion"
 }
 
 // *****************************************************************************
@@ -92,7 +97,6 @@ task openJpaSlf4j(dependsOn: openJpaEnhance) << {
     }
 }
 
-
 task hftChronicleIterator(dependsOn: classes) << {
     javaexec {
         main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.IndexedChronicleMain'
@@ -105,5 +109,5 @@ task hftChronicleIterator(dependsOn: classes) << {
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.7'
+    gradleVersion = '1.9'
 }
