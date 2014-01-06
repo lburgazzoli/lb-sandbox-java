@@ -3,107 +3,58 @@
 //
 // *****************************************************************************
 
-apply plugin: 'java'
+subprojects {
 
-sourceCompatibility = 1.7
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
-project.ext.slf4jVersion            = '1.7.5'
-project.ext.log4jVersion            = '1.2.17'
-project.ext.jacksonVersion          = '2.3.0'
-project.ext.hazelcastVersion        = '3.1.3'
-project.ext.osgiVersion             = '5.0.0'
-project.ext.reactorVersion          = '1.0.0.RELEASE'
-project.ext.openjpaVersion          = '2.3.0'
-project.ext.hsqldbVersion           = '2.3.1'
-project.ext.openHftChronicleVersion = '2.0.2'
-project.ext.openHftLangVersion      = '6.1.1'
-project.ext.hibernateVersion        = '4.3.0.Final'
-project.ext.hikariCPVersion         = '1.2.2'
-project.ext.junitVersion            = '4.11'
+    sourceCompatibility = 1.7
 
-// *****************************************************************************
-//
-// *****************************************************************************
+    project.ext.slf4jVersion            = '1.7.5'
+    project.ext.log4jVersion            = '1.2.17'
+    project.ext.jacksonVersion          = '2.3.0'
+    project.ext.hazelcastVersion        = '3.1.3'
+    project.ext.osgiVersion             = '5.0.0'
+    project.ext.reactorVersion          = '1.0.0.RELEASE'
+    project.ext.openjpaVersion          = '2.3.0'
+    project.ext.hsqldbVersion           = '2.3.1'
+    project.ext.openHftChronicleVersion = '2.0.2'
+    project.ext.openHftLangVersion      = '6.1.1'
+    project.ext.hibernateVersion        = '4.3.0.Final'
+    project.ext.hikariCPVersion         = '1.2.2'
+    project.ext.junitVersion            = '4.11'
 
-repositories {
-    maven { url 'http://repo1.maven.org/maven2' }
-    maven { url 'http://repo2.maven.org/maven2' }
-    maven { url 'http://repo.springsource.org/release' }
-    maven { url "http://repo.springsource.org/libs-milestone" }
-    maven { url 'http://repository.springsource.com/maven/bundles/release' }
-    maven { url 'http://repository.springsource.com/maven/bundles/external' }
-    maven { url 'http://repository.jboss.org/nexus/content/repositories/releases' }
-    maven { url 'http://repository.jboss.org/nexus/content/groups/public/' }
-    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+    // *****************************************************************************
+    //
+    // *****************************************************************************
 
-    mavenLocal()
-}
+    repositories {
+        maven { url 'http://repo1.maven.org/maven2' }
+        maven { url 'http://repo2.maven.org/maven2' }
+        maven { url 'http://repo.springsource.org/release' }
+        maven { url "http://repo.springsource.org/libs-milestone" }
+        maven { url 'http://repository.springsource.com/maven/bundles/release' }
+        maven { url 'http://repository.springsource.com/maven/bundles/external' }
+        maven { url 'http://repository.jboss.org/nexus/content/repositories/releases' }
+        maven { url 'http://repository.jboss.org/nexus/content/groups/public/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/releases' }
 
-dependencies {
-    compile "org.slf4j:slf4j-api:$slf4jVersion"
-    compile "org.slf4j:slf4j-ext:$slf4jVersion"
-    compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
-    compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
-    compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
-    compile "log4j:log4j:$log4jVersion"
-    compile "org.apache.commons:commons-lang3:3.2"
-    compile "org.osgi:org.osgi.core:$osgiVersion"
-    compile "org.osgi:org.osgi.compendium:$osgiVersion"
-    compile "com.google.guava:guava:15.0"
-    compile "com.hazelcast:hazelcast-all:$hazelcastVersion"
-    compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
-    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion"
-    compile "org.projectreactor:reactor-core:$reactorVersion"
-    compile "org.projectreactor:reactor-tcp:$reactorVersion"
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
-    compile "org.apache.openjpa:openjpa:$openjpaVersion"
-    compile "net.openhft:chronicle:$openHftChronicleVersion"
-    compile "net.openhft:lang:$openHftLangVersion"
-    compile "org.hibernate:hibernate-core:$hibernateVersion"
-    compile "com.zaxxer:HikariCP:$hikariCPVersion"
-
-    testCompile "junit:junit:$junitVersion"
-}
-
-// *****************************************************************************
-//
-// *****************************************************************************
-
-task openJpaEnhance(dependsOn: classes) << {
-    ant.taskdef(
-        name      : 'openJpaEnhancerTask',
-        classpath : project.runtimeClasspath.asPath,
-        classname : 'org.apache.openjpa.ant.PCEnhancerTask'
-    )
-
-    ant.openJpaEnhancerTask(
-        classpath : project.runtimeClasspath.asPath
-    )
-}
-
-task openJpaLog4j(dependsOn: openJpaEnhance) << {
-    javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.jpa.openjpa.OpenJpaMain'
-        classpath = project.runtimeClasspath
-        args      = ['log4j']
+        mavenLocal()
     }
-}
 
-task openJpaSlf4j(dependsOn: openJpaEnhance) << {
-    javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.jpa.openjpa.OpenJpaMain'
-        classpath = project.runtimeClasspath
-        args      = ['slf4j']
-    }
-}
+    dependencies {
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        compile "org.slf4j:slf4j-ext:$slf4jVersion"
+        compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
+        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+        compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+        compile "log4j:log4j:$log4jVersion"
+        compile "org.apache.commons:commons-lang3:3.2"
+        compile "org.osgi:org.osgi.core:$osgiVersion"
+        compile "org.osgi:org.osgi.compendium:$osgiVersion"
+        compile "com.google.guava:guava:15.0"
 
-task hftChronicleIterator(dependsOn: classes) << {
-    javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.IndexedChronicleMain'
-        classpath = project.runtimeClasspath
+        testCompile "junit:junit:$junitVersion"
     }
 }
 

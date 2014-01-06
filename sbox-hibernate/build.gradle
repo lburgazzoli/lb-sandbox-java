@@ -1,0 +1,30 @@
+
+dependencies {
+    compile "org.hsqldb:hsqldb:$hsqldbVersion"
+    compile "org.hibernate:hibernate-core:$hibernateVersion"
+    compile "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+    compile "com.zaxxer:HikariCP:$hikariCPVersion"
+}
+
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+/*
+task hibernateJpaMain(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.jpa.hobernate.HibernateJpaMain'
+        classpath = project.runtimeClasspath
+    }
+}
+*/
+
+task hibernateJpaMain {
+    doLast {
+        javaexec {
+            main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
+            classpath = project.runtimeClasspath
+        }
+    }
+}
