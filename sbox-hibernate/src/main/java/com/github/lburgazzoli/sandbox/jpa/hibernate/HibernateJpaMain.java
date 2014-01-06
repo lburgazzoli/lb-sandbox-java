@@ -87,7 +87,77 @@ public class HibernateJpaMain {
             }
 
             LOGGER.warn("Exception",e);
+        } finally {
+            if(em != null) {
+                em.close();
+            }
         }
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    /**
+     *
+     * @return
+     */
+    private static Map<String,String> commonProps() {
+        Map<String,String> props = Maps.newHashMap();
+        props.put("hibernate.hbm2ddl.auto"                     , "create-drop");
+        props.put("hibernate.show_sql"                         , "false");
+        props.put("hibernate.format_sql"                       , "true");
+        props.put("hibernate.connection.provider_class"        , HikariConnectionProvider.class.getName());
+        props.put("hibernate.connection.autocommit"            , "false");
+
+        return props;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static  Map<String,String> h2Props() {
+        Map<String,String> props = commonProps();
+
+        props.put("hibernate.dialect"                    , org.hibernate.dialect.H2Dialect.class.getName());
+        props.put("hibernate.hikari.dataSourceClassName" , org.h2.jdbcx.JdbcDataSource.class.getName());
+        props.put("hibernate.hikari.dataSource.URL"      , "jdbc:h2:mem:hbdb");
+        props.put("hibernate.hikari.dataSource.user"     , "sa");
+        props.put("hibernate.hikari.dataSource.password" , "");
+
+        return props;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static  Map<String,String> hsqlProps() {
+        Map<String,String> props = commonProps();
+
+        props.put("hibernate.dialect"                    , org.hibernate.dialect.HSQLDialect.class.getName());
+        props.put("hibernate.hikari.dataSourceClassName" , org.hsqldb.jdbc.JDBCDataSource.class.getName());
+        props.put("hibernate.hikari.dataSource.url"      , "jdbc:hsqldb:mem:hbdb");
+        props.put("hibernate.hikari.dataSource.user"     , "sa");
+        props.put("hibernate.hikari.dataSource.password" , "");
+
+        return props;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static  Map<String,String> derbyProps() {
+        Map<String,String> props = commonProps();
+
+        props.put("hibernate.dialect"                          , org.hibernate.dialect.DerbyTenSevenDialect.class.getName());
+        props.put("hibernate.hikari.dataSourceClassName"       , org.apache.derby.jdbc.EmbeddedDataSource40.class.getName());
+        props.put("hibernate.hikari.dataSource.databaseName"   , "hbdb");
+        props.put("hibernate.hikari.dataSource.createDatabase" , "create");
+
+        return props;
     }
 
     // *************************************************************************
@@ -98,22 +168,20 @@ public class HibernateJpaMain {
         EntityManagerFactory emf = null;
 
         try {
-            Map<String,String> props = Maps.newHashMap();
-            props.put("hibernate.hbm2ddl.auto"               , "create-drop");
-            props.put("hibernate.dialect"                    , org.hibernate.dialect.HSQLDialect.class.getName());
-            props.put("hibernate.show_sql"                   , "false");
-            props.put("hibernate.format_sql"                 , "true");
-            props.put("hibernate.connection.provider_class"  , HikariConnectionProvider.class.getName());
-            props.put("hibernate.connection.autocommit"      , "false");
-            props.put("hibernate.hikari.dataSourceClassName" , org.hsqldb.jdbc.JDBCDataSource.class.getName());
-            props.put("hibernate.hikari.dataSource.url"      , "jdbc:hsqldb:mem:hbdb");
-            props.put("hibernate.hikari.dataSource.user"     , "sa");
-            props.put("hibernate.hikari.dataSource.password" , "");
+            if(args.length >= 1) {
+                if("derby".equalsIgnoreCase(args[0])) {
+                    emf = Persistence.createEntityManagerFactory("HBPU",derbyProps());
+                } else if("hsql".equalsIgnoreCase(args[0])) {
+                    emf = Persistence.createEntityManagerFactory("HBPU",hsqlProps());
+                } else if("h2".equalsIgnoreCase(args[0])) {
+                    emf = Persistence.createEntityManagerFactory("HBPU",h2Props());
+                }
 
-            emf = Persistence.createEntityManagerFactory("HBPU",props);
-
-            insert(emf);
-            list(emf);
+                if(emf != null) {
+                    insert(emf);
+                    list(emf);
+                }
+            }
 
         } catch(Exception e) {
             LOGGER.warn("Exception",e);

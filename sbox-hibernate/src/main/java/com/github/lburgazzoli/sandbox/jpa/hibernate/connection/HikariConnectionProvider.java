@@ -54,9 +54,6 @@ public class HikariConnectionProvider implements ConnectionProvider,Configurable
      * c-tor
      */
     public HikariConnectionProvider() {
-
-        LOGGER.debug("==== HikariConnectionProvider");
-
         this.hcfg = null;
         this.hds = null;
     }
@@ -68,7 +65,7 @@ public class HikariConnectionProvider implements ConnectionProvider,Configurable
     @Override
     public void configure(Map props) throws HibernateException {
         try {
-            LOGGER.debug("ConfiguringHikariCP with properties: {}",props);
+            LOGGER.debug("Configuring HikariCP");
 
             this.hcfg = HikariConfigurationUtil.loadConfiguration(props);
             this.hds = new HikariDataSource(this.hcfg);
@@ -91,14 +88,11 @@ public class HikariConnectionProvider implements ConnectionProvider,Configurable
             conn = this.hds.getConnection();
         }
 
-        LOGGER.debug("connection get : {}",conn);
-
         return conn;
     }
 
     @Override
     public void closeConnection(Connection conn) throws SQLException {
-        LOGGER.debug("connection close: {}",conn);
         conn.close();
     }
 
