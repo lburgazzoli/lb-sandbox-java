@@ -19,6 +19,7 @@ project.ext.openHftChronicleVersion = '2.0.2'
 project.ext.openHftLangVersion      = '6.1.1'
 project.ext.hibernateVersion        = '4.3.0.Final'
 project.ext.hikariCPVersion         = '1.2.2'
+project.ext.junitVersion            = '4.11'
 
 // *****************************************************************************
 //
@@ -63,6 +64,8 @@ dependencies {
     compile "net.openhft:lang:$openHftLangVersion"
     compile "org.hibernate:hibernate-core:$hibernateVersion"
     compile "com.zaxxer:HikariCP:$hikariCPVersion"
+
+    testCompile "junit:junit:$junitVersion"
 }
 
 // *****************************************************************************
