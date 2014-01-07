@@ -15,8 +15,12 @@
  */
 package com.github.lburgazzoli.sandbox.jpa.hibernate;
 
+import com.github.lburgazzoli.sandbox.jpa.hibernate.connection.HSQLConnectionProvider;
 import com.github.lburgazzoli.sandbox.jpa.hibernate.connection.HikariConnectionProvider;
 import com.google.common.collect.Maps;
+import org.hibernate.c3p0.internal.C3P0ConnectionProvider;
+import org.hsqldb.jdbc.JDBCDataSource;
+import org.hsqldb.jdbc.JDBCDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,60 +106,33 @@ public class HibernateJpaMain {
      *
      * @return
      */
-    private static Map<String,String> commonProps() {
+    private static Map<String,String> props(Class<?> providerClass) throws Exception {
         Map<String,String> props = Maps.newHashMap();
-        props.put("hibernate.hbm2ddl.auto"                     , "create-drop");
-        props.put("hibernate.show_sql"                         , "false");
-        props.put("hibernate.format_sql"                       , "true");
-        props.put("hibernate.connection.provider_class"        , HikariConnectionProvider.class.getName());
-        props.put("hibernate.connection.autocommit"            , "false");
+        props.put("hibernate.hbm2ddl.auto"              , "create-drop");
+        props.put("hibernate.show_sql"                  , "false");
+        props.put("hibernate.format_sql"                , "true");
+        props.put("hibernate.connection.provider_class" , providerClass.getName());
+        props.put("hibernate.connection.autocommit"     , "false");
 
-        return props;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private static  Map<String,String> h2Props() {
-        Map<String,String> props = commonProps();
-
-        props.put("hibernate.dialect"                    , org.hibernate.dialect.H2Dialect.class.getName());
-        props.put("hibernate.hikari.dataSourceClassName" , org.h2.jdbcx.JdbcDataSource.class.getName());
-        props.put("hibernate.hikari.dataSource.URL"      , "jdbc:h2:mem:hbdb");
-        props.put("hibernate.hikari.dataSource.user"     , "sa");
-        props.put("hibernate.hikari.dataSource.password" , "");
-
-        return props;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private static  Map<String,String> hsqlProps() {
-        Map<String,String> props = commonProps();
-
-        props.put("hibernate.dialect"                    , org.hibernate.dialect.HSQLDialect.class.getName());
-        props.put("hibernate.hikari.dataSourceClassName" , org.hsqldb.jdbc.JDBCDataSource.class.getName());
-        props.put("hibernate.hikari.dataSource.url"      , "jdbc:hsqldb:mem:hbdb");
-        props.put("hibernate.hikari.dataSource.user"     , "sa");
-        props.put("hibernate.hikari.dataSource.password" , "");
-
-        return props;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private static  Map<String,String> derbyProps() {
-        Map<String,String> props = commonProps();
-
-        props.put("hibernate.dialect"                          , org.hibernate.dialect.DerbyTenSevenDialect.class.getName());
-        props.put("hibernate.hikari.dataSourceClassName"       , org.apache.derby.jdbc.EmbeddedDataSource40.class.getName());
-        props.put("hibernate.hikari.dataSource.databaseName"   , "hbdb");
-        props.put("hibernate.hikari.dataSource.createDatabase" , "create");
+        if(providerClass == HikariConnectionProvider.class) {
+            props.put("hibernate.hikari.dataSourceClassName" , JDBCDataSource.class.getName());
+            props.put("hibernate.hikari.dataSource.url"      , "jdbc:hsqldb:mem:hbdb");
+            props.put("hibernate.hikari.dataSource.user"     , "sa");
+            props.put("hibernate.hikari.dataSource.password" , "");
+        } else if(providerClass == HSQLConnectionProvider.class) {
+            props.put("hibernate.connection.url"             ,"jdbc:hsqldb:mem:hbdb");
+            props.put("hibernate.connection.username"        ,"sa");
+            props.put("hibernate.connection.password"        ,"");
+        } else if(providerClass == C3P0ConnectionProvider.class) {
+            props.put("hibernate.connection.url"             ,"jdbc:hsqldb:mem:hbdb");
+            props.put("hibernate.connection.driver_class"    ,JDBCDriver.class.getName());
+            props.put("hibernate.connection.username"        ,"sa");
+            props.put("hibernate.connection.password"        ,"");
+            props.put("hibernate.c3p0.min_size"              ,"5");
+            props.put("hibernate.c3p0.max_size"              ,"10");
+        } else {
+            throw new Exception("Unknown providerClass " + providerClass.getName());
+        }
 
         return props;
     }
@@ -166,20 +143,24 @@ public class HibernateJpaMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = null;
+        Map<String,String> emfProps = null;
 
         try {
-            if(args.length >= 1) {
-                if("derby".equalsIgnoreCase(args[0])) {
-                    emf = Persistence.createEntityManagerFactory("HBPU",derbyProps());
+            if(args.length == 1) {
+                if("hikari".equalsIgnoreCase(args[0])) {
+                    emfProps = props(HikariConnectionProvider.class);
                 } else if("hsql".equalsIgnoreCase(args[0])) {
-                    emf = Persistence.createEntityManagerFactory("HBPU",hsqlProps());
-                } else if("h2".equalsIgnoreCase(args[0])) {
-                    emf = Persistence.createEntityManagerFactory("HBPU",h2Props());
+                    emfProps = props(HSQLConnectionProvider.class);
+                } else if("c3p0".equalsIgnoreCase(args[0])) {
+                    emfProps = props(C3P0ConnectionProvider.class);
                 }
 
-                if(emf != null) {
-                    insert(emf);
-                    list(emf);
+                if(emfProps != null) {
+                    emf = Persistence.createEntityManagerFactory("HBPU",emfProps);
+                    if(emf != null) {
+                        insert(emf);
+                        list(emf);
+                    }
                 }
             }
 

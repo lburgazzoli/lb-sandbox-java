@@ -1,8 +1,13 @@
 
+// *****************************************************************************
+//
+// *****************************************************************************
+
 dependencies {
     compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.hibernate:hibernate-core:$hibernateVersion"
     compile "org.hibernate:hibernate-entitymanager:$hibernateVersion"
+    compile "org.hibernate:hibernate-c3p0:$hibernateVersion"
     compile "com.zaxxer:HikariCP:$hikariCPVersion"
     compile "org.apache.derby:derby:$derbyVersion"
     compile "com.h2database:h2:$h2Version"
@@ -12,10 +17,10 @@ dependencies {
 //
 // *****************************************************************************
 
-task hibernateJpaMainDerby(type: JavaExec) {
+task hibernateJpaMainHikari(type: JavaExec) {
     main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
     classpath = project.runtimeClasspath
-    args      = [ 'derby' ]
+    args      = [ 'hikari' ]
 }
 
 task hibernateJpaMainHsql(type: JavaExec) {
@@ -24,9 +29,8 @@ task hibernateJpaMainHsql(type: JavaExec) {
     args      = [ 'hsql' ]
 }
 
-
-task hibernateJpaMainH2(type: JavaExec) {
+task hibernateJpaMainC3P0(type: JavaExec) {
     main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
     classpath = project.runtimeClasspath
-    args      = [ 'h2' ]
+    args      = [ 'c3p0' ]
 }
