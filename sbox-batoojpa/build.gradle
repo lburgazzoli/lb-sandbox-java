@@ -11,6 +11,7 @@ dependencies {
     compile "com.jolbox:bonecp:$bonecpVersion"
     compile "com.zaxxer:HikariCP:$hikariCPVersion"
 }
+
 // *****************************************************************************
 //
 // *****************************************************************************
@@ -21,3 +22,8 @@ task batooJpaMainHikari(type: JavaExec) {
     args      = [ 'hikari' ]
 }
 
+task batooJpaMainBone(type: JavaExec) {
+    main      = 'com.github.lburgazzoli.sandbox.jpa.batoo.BatooJpaMain'
+    classpath = project.runtimeClasspath
+    args      = [ 'bone' ]
+}
