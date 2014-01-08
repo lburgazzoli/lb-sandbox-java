@@ -15,7 +15,6 @@
  */
 package com.github.lburgazzoli.sandbox.jpa.batoo.connection;
 
-import com.jolbox.bonecp.BoneCPConfig;
 import org.batoo.jpa.jdbc.AbstractDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
