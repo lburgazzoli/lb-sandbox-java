@@ -2,3 +2,4 @@ rootProject.name = "lb-sandbox"
 
 include "sbox-misc"
 include "sbox-hibernate"
+include "sbox-batoojpa"

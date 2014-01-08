@@ -1,0 +1,23 @@
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+dependencies {
+    compile "javax.validation:validation-api:1.0.0.GA"
+    compile "org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.1"
+    compile "org.hsqldb:hsqldb:$hsqldbVersion"
+    compile "org.batoo.jpa:batoo-jpa:$batooVersion"
+    compile "com.jolbox:bonecp:$bonecpVersion"
+    compile "com.zaxxer:HikariCP:$hikariCPVersion"
+}
+// *****************************************************************************
+//
+// *****************************************************************************
+
+task batooJpaMainHikari(type: JavaExec) {
+    main      = 'com.github.lburgazzoli.sandbox.jpa.batoo.BatooJpaMain'
+    classpath = project.runtimeClasspath
+    args      = [ 'hikari' ]
+}
+
