@@ -1,0 +1,9 @@
+
+dependencies {
+    compile "org.apache.camel:camel-core:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-blueprint:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-beanio:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-ftp:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-quartz2:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-script:${apacheCamelVersion}"
+}

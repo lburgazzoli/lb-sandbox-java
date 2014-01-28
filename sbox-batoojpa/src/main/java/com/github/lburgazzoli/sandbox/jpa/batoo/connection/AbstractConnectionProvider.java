@@ -150,8 +150,8 @@ public abstract class AbstractConnectionProvider extends AbstractDataSource {
             String key = (String)keyo;
             if(key.startsWith(prefix)) {
                 cpProps.setProperty(
-                        key.substring(prefix.length()),
-                        (String)props.get(key));
+                    key.substring(prefix.length()),
+                    (String)props.get(key));
             }
         }
 
