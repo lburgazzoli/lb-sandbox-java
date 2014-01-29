@@ -10,7 +10,7 @@ dependencies {
     compile "org.projectreactor:reactor-tcp:$reactorVersion"
     compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.apache.openjpa:openjpa:$openjpaVersion"
-    compile "net.openhft:chronicle:$openHftChronicleVersion"
+    compile "net.openhft:com.github.lburgazzoli.sandbox.hft.chronicle:$openHftChronicleVersion"
     compile "net.openhft:lang:$openHftLangVersion"
 
     testCompile "junit:junit:$junitVersion"
@@ -51,7 +51,7 @@ task openJpaSlf4j(dependsOn: openJpaEnhance) << {
 
 task hftChronicleIterator(dependsOn: classes) << {
     javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.IndexedChronicleMain'
+        main      = 'IndexedChronicleMain'
         classpath = project.runtimeClasspath
     }
 }

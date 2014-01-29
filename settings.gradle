@@ -1,6 +1,8 @@
-rootProject.name = "lb-sandbox"
+rootProject.name = "lb-sandbox-java"
 
 include "sbox-misc"
 include "sbox-hibernate"
 include "sbox-batoojpa"
 include "sbox-camel"
+include "sbox-hft"
+include "sbox-reactor"

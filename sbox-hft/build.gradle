@@ -1,0 +1,5 @@
+
+dependencies {
+    compile "net.openhft:chronicle:$openHftChronicleVersion"
+    compile "net.openhft:lang:$openHftLangVersion"
+}
