@@ -35,16 +35,16 @@ public class ChronicleDefaultTcpSourceMain {
     public static void main(String[] args) {
         try {
             boolean run = true;
-            String path = ChronicleDefaultTcp.path("default.source");
+            String path = ChronicleTcp.path("default.source");
 
             ChronicleTools.warmup();
             ChronicleTools.deleteOnExit(path);
 
-            final Chronicle source = new InProcessChronicleSource(new IndexedChronicle(path),ChronicleDefaultTcp.PORT);
-            final ChronicleDefaultTcp.DataWriter writer = new ChronicleDefaultTcp.DataWriter(source);
+            final Chronicle source = new InProcessChronicleSource(new IndexedChronicle(path), ChronicleTcp.PORT);
+            final ChronicleTcp.DataWriter writer = new ChronicleTcp.DataWriter(source);
 
             long start = System.nanoTime();
-            for (int i = 1; i <= ChronicleDefaultTcp.UPDATES; i++) {
+            for (int i = 1; i <= ChronicleTcp.UPDATES; i++) {
                 writer.write(i,"symbol", 99.9, i, 100.1, i + 1);
             }
 
@@ -52,8 +52,8 @@ public class ChronicleDefaultTcpSourceMain {
 
             LOGGER.info(
                 String.format("Took an average of %.2f us to write %d",
-                    (end - start) / ChronicleDefaultTcp.UPDATES / 1e3,
-                    ChronicleDefaultTcp.UPDATES)
+                    (end - start) / ChronicleTcp.UPDATES / 1e3,
+                    ChronicleTcp.UPDATES)
             );
 
             while(run) {

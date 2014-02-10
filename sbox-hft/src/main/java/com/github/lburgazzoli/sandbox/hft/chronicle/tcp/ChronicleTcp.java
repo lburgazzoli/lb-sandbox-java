@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  *
  */
-public class ChronicleDefaultTcp {
+public class ChronicleTcp {
     public static final String BASEPATH    = "./data/chronicle/tcp";
     public static final int    UPDATES     = 1000000;
     public static final int    PORT        = 12345;

@@ -35,16 +35,16 @@ public class ChronicleDefaultTcpSinkMain {
     public static void main(String[] args) {
         try {
             boolean run = true;
-            String path = ChronicleDefaultTcp.path("default.sink");
+            String path = ChronicleTcp.path("default.sink");
 
             ChronicleTools.warmup();
             ChronicleTools.deleteOnExit(path);
 
-            final Chronicle sink = new InProcessChronicleSink(new IndexedChronicle(path),"localhost",ChronicleDefaultTcp.PORT);
-            final ChronicleDefaultTcp.DataReader reader = new ChronicleDefaultTcp.DataReader(sink);
+            final Chronicle sink = new InProcessChronicleSink(new IndexedChronicle(path),"localhost", ChronicleTcp.PORT);
+            final ChronicleTcp.DataReader reader = new ChronicleTcp.DataReader(sink);
 
             long start = System.nanoTime();
-            while (reader.count() < ChronicleDefaultTcp.UPDATES) {
+            while (reader.count() < ChronicleTcp.UPDATES) {
                 reader.read();
             }
 
@@ -52,7 +52,7 @@ public class ChronicleDefaultTcpSinkMain {
 
             LOGGER.info(
                 String.format("Took an average of %.2f us to read %d",
-                    (end - start) / ChronicleDefaultTcp.UPDATES / 1e3,
+                    (end - start) / ChronicleTcp.UPDATES / 1e3,
                     reader.count())
             );
 

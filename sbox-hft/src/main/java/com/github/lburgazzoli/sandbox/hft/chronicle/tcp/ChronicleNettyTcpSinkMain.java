@@ -22,14 +22,8 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class ChronicleNettyTcpMain {
-    private static final Logger LOGGER      = LoggerFactory.getLogger(ChronicleNettyTcpMain.class);
-    private static final String BASEPATH    = "./data/chronicle/tcp";
-    private static final String PATH_SOURCE = BASEPATH + "/netty.source";
-    private static final String PATH_SINK   = BASEPATH + "/netty.sink";
-    private static final int    UPDATES     = 1000000;
-    private static final int    PORT        = 12345;
-    private static final char   CODE_PX     = 'P';
+public class ChronicleNettyTcpSinkMain {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleNettyTcpSinkMain.class);
 
     // *************************************************************************
     //
@@ -38,8 +32,7 @@ public class ChronicleNettyTcpMain {
     public static void main(String[] args) {
         try {
             ChronicleTools.warmup();
-            ChronicleTools.deleteOnExit(PATH_SOURCE);
-            ChronicleTools.deleteOnExit(PATH_SINK);
+
 
         } catch(Exception e) {
             LOGGER.warn("Main Exception", e);
