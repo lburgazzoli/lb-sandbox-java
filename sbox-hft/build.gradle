@@ -2,4 +2,5 @@
 dependencies {
     compile "net.openhft:chronicle:$openHftChronicleVersion"
     compile "net.openhft:lang:$openHftLangVersion"
+    compile "io.netty:netty-all:$nettyVersion"
 }
