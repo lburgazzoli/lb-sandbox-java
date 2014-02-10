@@ -28,6 +28,7 @@ subprojects {
     project.ext.batooVersion            = '2.0.1.3_1-SNAPSHOT'
     project.ext.bonecpVersion           = '0.8.0.RELEASE'
     project.ext.apacheCamelVersion      = '2.12.2'
+    project.ext.nettyVersion            = '4.0.15.Final'
 
     // *****************************************************************************
     //
@@ -69,5 +70,5 @@ subprojects {
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.10'
+    gradleVersion = '1.9'
 }

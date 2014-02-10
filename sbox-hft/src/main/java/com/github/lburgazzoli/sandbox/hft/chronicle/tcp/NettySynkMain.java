@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.sandbox.hft.chronicle;
+package com.github.lburgazzoli.sandbox.hft.chronicle.tcp;
 
-import net.openhft.chronicle.Excerpt;
+import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ExcerptAppender;
 import net.openhft.chronicle.IndexedChronicle;
+import net.openhft.chronicle.tcp.InProcessChronicleSource;
 import net.openhft.chronicle.tools.ChronicleTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,41 +26,34 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class IndexedChronicleMain {
-    private static final Logger LOGGER   = LoggerFactory.getLogger(IndexedChronicleMain.class);
-    private static final String BASEPATH = "./data/chronicle/simple";
+public class NettySynkMain {
+    private static final Logger LOGGER      = LoggerFactory.getLogger(NettySynkMain.class);
+    private static final String BASEPATH    = "./data/chronicle/netty";
+    private static final String PATH_SOURCE = BASEPATH + "/netty.source";
+    private static final String PATH_SINK   = BASEPATH + "/netty.sink";
+    private static final int    PORT        = 12345;
+
 
     // *************************************************************************
     //
     // *************************************************************************
 
-    private static void write(int data) throws Exception {
-        IndexedChronicle ic = new IndexedChronicle(BASEPATH);
-        ExcerptAppender ex = ic.createAppender();
-        ex.startExcerpt(4);
-        ex.writeInt(data);
-        ex.finish();
+    private class DataPublisher {
+        private final ExcerptAppender m_excerpt;
 
-        LOGGER.debug("write.index = {}",ex.index());
-    }
+        /**
+         * c-tor
+         *
+         * @param chronicle
+         * @throws Exception
+         */
+        public DataPublisher(Chronicle chronicle) throws Exception {
+            m_excerpt = chronicle.createAppender();
+        }
 
-    public static void read() throws Exception {
-        IndexedChronicle ic = new IndexedChronicle(BASEPATH);
-        Excerpt ex = ic.createExcerpt();
+        public void publish() {
 
-        hasNext(ex);
-        hasNext(ex);
-        hasNext(ex);
-    }
-
-    public static boolean hasNext(Excerpt ex) throws Exception {
-        long    index   = ex.index();
-        boolean hasNext = ex.nextIndex();
-        ex.index(index);
-
-        LOGGER.debug("index : hasNext={},before={},after={}",hasNext,index,ex.index());
-
-        return hasNext;
+        }
     }
 
     // *************************************************************************
@@ -68,13 +62,12 @@ public class IndexedChronicleMain {
 
     public static void main(String[] args) {
         try {
-            write(0);
-            write(1);
-            write(2);
+            ChronicleTools.warmup();
+            ChronicleTools.deleteOnExit(PATH_SOURCE);
+            ChronicleTools.deleteOnExit(PATH_SINK);
 
-            read();
-
-            ChronicleTools.deleteOnExit(BASEPATH);
+            final Chronicle source = new InProcessChronicleSource(new IndexedChronicle(PATH_SOURCE),PORT);
+            final ExcerptAppender appender = source.createAppender();
 
         } catch(Exception e) {
             LOGGER.warn("Main Exception", e);
