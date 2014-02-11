@@ -15,9 +15,9 @@
  */
 package com.github.lburgazzoli.sandbox.hft.chronicle.tcp;
 
+import com.github.lburgazzoli.sandbox.hft.chronicle.tcp.netty.NettyChronicleSink1;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.IndexedChronicle;
-import net.openhft.chronicle.tcp.InProcessChronicleSink;
 import net.openhft.chronicle.tools.ChronicleTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class ChronicleDefaultTcpSinkMain {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleDefaultTcpSinkMain.class);
+public class ChronicleNettyTcpSinkMain1 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleNettyTcpSinkMain1.class);
 
     // *************************************************************************
     //
@@ -35,14 +35,14 @@ public class ChronicleDefaultTcpSinkMain {
     public static void main(String[] args) {
         try {
             boolean run = true;
-            String path = ChronicleTcp.path("default.sink");
+            String path = ChronicleTcp.path("netty.sink");
 
             ChronicleTools.warmup();
 
             for(int i=0;i<ChronicleTcp.LOOPS;i++) {
                 ChronicleTools.deleteOnExit(path);
 
-                final Chronicle sink = new InProcessChronicleSink(new IndexedChronicle(path),"localhost", ChronicleTcp.PORT);
+                final Chronicle sink = new NettyChronicleSink1(new IndexedChronicle(path),"localhost", ChronicleTcp.PORT);
                 final ChronicleTcp.DataReader reader = new ChronicleTcp.DataReader(sink);
 
                 long start = System.nanoTime();
@@ -60,6 +60,8 @@ public class ChronicleDefaultTcpSinkMain {
 
                 sink.close();
             }
+
+
         } catch(Exception e) {
             LOGGER.warn("Main Exception", e);
         }

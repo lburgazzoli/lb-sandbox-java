@@ -30,6 +30,7 @@ subprojects {
     project.ext.bonecpVersion           = '0.8.0.RELEASE'
     project.ext.apacheCamelVersion      = '2.12.2'
     project.ext.nettyVersion            = '4.0.15.Final'
+    project.ext.javassistVersion        = '3.18.1-GA'
 
     // *************************************************************************
     //

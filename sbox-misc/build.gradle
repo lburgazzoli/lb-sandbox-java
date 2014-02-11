@@ -10,7 +10,7 @@ dependencies {
     compile "org.projectreactor:reactor-tcp:$reactorVersion"
     compile "org.hsqldb:hsqldb:$hsqldbVersion"
     compile "org.apache.openjpa:openjpa:$openjpaVersion"
-    compile "net.openhft:com.github.lburgazzoli.sandbox.hft.chronicle:$openHftChronicleVersion"
+    compile "net.openhft:chronicle:$openHftChronicleVersion"
     compile "net.openhft:lang:$openHftLangVersion"
 
     testCompile "junit:junit:$junitVersion"

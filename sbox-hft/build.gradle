@@ -3,4 +3,37 @@ dependencies {
     compile "net.openhft:chronicle:$openHftChronicleVersion"
     compile "net.openhft:lang:$openHftLangVersion"
     compile "io.netty:netty-all:$nettyVersion"
+    compile "org.javassist:javassist:$javassistVersion"
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+task hftChronicleDefaultServer(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleDefaultTcpSourceMain'
+        classpath = project.runtimeClasspath
+    }
+}
+
+task hftChronicleDefaultSink(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleDefaultTcpSinkMain'
+        classpath = project.runtimeClasspath
+    }
+}
+
+task hftChronicleNettySink1(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleNettyTcpSinkMain1'
+        classpath = project.runtimeClasspath
+    }
+}
+
+task hftChronicleNettySink2(dependsOn: classes) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleNettyTcpSinkMain2'
+        classpath = project.runtimeClasspath
+    }
 }

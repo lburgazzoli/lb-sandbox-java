@@ -18,7 +18,6 @@ package com.github.lburgazzoli.sandbox.hft.chronicle.tcp.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -26,20 +25,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.ReferenceCountUtil;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.Excerpt;
 import net.openhft.chronicle.ExcerptAppender;
-import net.openhft.chronicle.ExcerptCommon;
 import net.openhft.chronicle.ExcerptTailer;
-import net.openhft.chronicle.IndexedChronicle;
-import net.openhft.chronicle.tools.WrappedExcerpt;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +41,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.net.InetSocketAddress;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
  */
-public class NettyChronicleSink implements Chronicle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyChronicleSink.class);
+public class NettyChronicleSink1 implements Chronicle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NettyChronicleSink1.class);
 
     private final Chronicle m_chronicle;
     private final ExcerptAppender m_excerpt;
@@ -70,7 +65,7 @@ public class NettyChronicleSink implements Chronicle {
      * @param host
      * @param port
      */
-    public NettyChronicleSink(final Chronicle chronicle,final String host,final int port) throws IOException {
+    public NettyChronicleSink1(final Chronicle chronicle, final String host, final int port) throws IOException {
         m_chronicle = chronicle;
         m_excerpt = m_chronicle.createAppender();
         m_host = host;
@@ -137,20 +132,15 @@ public class NettyChronicleSink implements Chronicle {
             m_bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
             m_bootstrap.option(ChannelOption.TCP_NODELAY,true);
             m_bootstrap.option(ChannelOption.SO_RCVBUF,256 * 1024);
-
-
-            if(true) {
-                m_bootstrap.option(
-                    ChannelOption.ALLOCATOR,
-                    new PooledByteBufAllocator(true));
-            }
+            m_bootstrap.option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(true));
+            m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR,new FixedRecvByteBufAllocator(256 * 1024));
 
 
             m_bootstrap.handler(new ChannelInitializer() {
                 @Override
                 protected void initChannel(Channel channel) throws Exception {
-                    channel.pipeline().addLast("decoder",new ExcerptDecoder());
-                    channel.pipeline().addLast("handler",new ExcerptHandler());
+                    channel.pipeline().addLast("decoder", new ExcerptDecoder());
+                    channel.pipeline().addLast("handler", new ExcerptHandler());
                 }
             });
 
@@ -183,46 +173,68 @@ public class NettyChronicleSink implements Chronicle {
     private class ExcerptDecoder extends ByteToMessageDecoder {
 
         private boolean m_first;
+        private final ByteOrder m_byteOrder;
+        private int m_count;
+
 
         /**
          * c-tor
          */
         public ExcerptDecoder() {
             m_first = true;
+            m_byteOrder = ByteOrder.nativeOrder();
+            m_count = 0;
         }
 
         @Override
         protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-            int offset = in.readerIndex();
-            int sizeOffset = offset;
-            long index = -9;
+            ByteBuf data = in.order(m_byteOrder);
 
-            if(in.readableBytes() > (m_first ? 12 : 4)) {
-                if(m_first) {
-                    index = in.getLong(offset);
-                    if (index != m_chronicle.size()) {
-                        throw new StreamCorruptedException("Expected index " + m_chronicle.size() + " but got " + index);
+            while(true) {
+                int offset = data.readerIndex();
+                int sizeOffset = offset;
+                int minSize = m_first ? 8 + 4 + 8 : 4 + 8;
+
+                if(data.readableBytes() > minSize) {
+                    if(m_first) {
+                        long index = data.getLong(offset);
+                        if (index != m_chronicle.size()) {
+                            throw new StreamCorruptedException("Expected index " + m_chronicle.size() + " but got " + index);
+                        }
+
+                        sizeOffset += 8;
+
+                        m_first = false;
                     }
-                    sizeOffset += 8;
-
-                    m_first = false;
+                } else {
+                    break;
                 }
-            }
 
-            int size = in.getInt(sizeOffset);
+                int size = data.getInt(sizeOffset);
+                switch (size) {
+                    case -128:
+                        LOGGER.debug("... received inSync");
+                        return;
+                    case -127:
+                        LOGGER.debug("... received padded");
+                        //excerpt.startExcerpt(((IndexedChronicle) chronicle).config().dataBlockSize() - 1);
+                        return;
+                    default:
+                        break;
+                }
 
-            LOGGER.debug("First {}, offset={}, sizeOffset={}, readableBytes={}, index={}, size={}",
-                m_first,offset,sizeOffset,in.readableBytes(),index,size);
+                if (size > 128 << 20 || size < 0) {
+                    throw new StreamCorruptedException("size was " + size);
+                }
 
-            if (size > 128 << 20 || size < 0) {
-                throw new StreamCorruptedException("size was " + size);
-            }
-
-            if(in.readableBytes() >= size) {
-                byte[] buffer = new byte[size];
-                in.readerIndex(sizeOffset + 4);
-                in.readBytes(buffer);
-                out.add(buffer);
+                if(data.readableBytes() >= size + 4) {
+                    byte[] buffer = new byte[size];
+                    data.readerIndex(sizeOffset + 4);
+                    data.readBytes(buffer);
+                    out.add(buffer);
+                } else {
+                    break;
+                }
             }
         }
     }
@@ -235,6 +247,13 @@ public class NettyChronicleSink implements Chronicle {
      *
      */
     private class ExcerptHandler extends SimpleChannelInboundHandler<byte[]> {
+
+        /**
+         * c-tor
+         */
+        public ExcerptHandler() {
+        }
+
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             LOGGER.debug("channelActive, lastWrittenIndex={}",m_chronicle.lastWrittenIndex());
@@ -242,7 +261,7 @@ public class NettyChronicleSink implements Chronicle {
             ByteBuf index = ctx.alloc().buffer(8);
             index.writeLong(m_chronicle.lastWrittenIndex());
 
-            ChannelFuture f = ctx.writeAndFlush(index).addListener(new ChannelFutureListener() {
+            ctx.writeAndFlush(index).addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) {
                     LOGGER.debug("channelActive, lastIndex written");

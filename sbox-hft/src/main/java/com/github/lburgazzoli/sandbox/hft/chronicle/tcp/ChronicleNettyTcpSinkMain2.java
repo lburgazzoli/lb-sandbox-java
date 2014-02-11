@@ -15,7 +15,7 @@
  */
 package com.github.lburgazzoli.sandbox.hft.chronicle.tcp;
 
-import com.github.lburgazzoli.sandbox.hft.chronicle.tcp.netty.NettyChronicleSink;
+import com.github.lburgazzoli.sandbox.hft.chronicle.tcp.netty.NettyChronicleSink2;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.IndexedChronicle;
 import net.openhft.chronicle.tools.ChronicleTools;
@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class ChronicleNettyTcpSinkMain {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleNettyTcpSinkMain.class);
+public class ChronicleNettyTcpSinkMain2 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleNettyTcpSinkMain2.class);
 
     // *************************************************************************
     //
@@ -38,25 +38,28 @@ public class ChronicleNettyTcpSinkMain {
             String path = ChronicleTcp.path("netty.sink");
 
             ChronicleTools.warmup();
-            ChronicleTools.deleteOnExit(path);
 
-            final Chronicle sink = new NettyChronicleSink(new IndexedChronicle(path),"localhost", ChronicleTcp.PORT);
-            final ChronicleTcp.DataReader reader = new ChronicleTcp.DataReader(sink);
+            for(int i=0;i<ChronicleTcp.LOOPS;i++) {
+                ChronicleTools.deleteOnExit(path);
 
-            long start = System.nanoTime();
-            while (reader.count() < ChronicleTcp.UPDATES) {
-                reader.read();
+                final Chronicle sink = new NettyChronicleSink2(new IndexedChronicle(path),"localhost", ChronicleTcp.PORT);
+                final ChronicleTcp.DataReader reader = new ChronicleTcp.DataReader(sink);
+
+                long start = System.nanoTime();
+                while (reader.count() < ChronicleTcp.UPDATES) {
+                    reader.read();
+                }
+
+                long end = System.nanoTime();
+
+                LOGGER.info(
+                    String.format("Took an average of %.2f us to read %d",
+                        (end - start) / ChronicleTcp.UPDATES / 1e3,
+                        reader.count())
+                );
+
+                sink.close();
             }
-
-            long end = System.nanoTime();
-
-            LOGGER.info(
-                String.format("Took an average of %.2f us to read %d",
-                    (end - start) / ChronicleTcp.UPDATES / 1e3,
-                    reader.count())
-            );
-
-            sink.close();
 
 
         } catch(Exception e) {
