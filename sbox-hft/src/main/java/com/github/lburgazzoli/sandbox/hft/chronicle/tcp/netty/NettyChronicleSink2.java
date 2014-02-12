@@ -29,6 +29,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.ResourceLeakDetector;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.Excerpt;
 import net.openhft.chronicle.ExcerptAppender;
@@ -38,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.net.InetSocketAddress;
@@ -72,6 +72,8 @@ public class NettyChronicleSink2 implements Chronicle {
         m_port = port;
         m_connected = new AtomicBoolean(false);
         m_bootstrap = null;
+
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
     }
 
     @Override
@@ -135,6 +137,8 @@ public class NettyChronicleSink2 implements Chronicle {
             m_bootstrap.option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(true));
             m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR,new FixedRecvByteBufAllocator(256 * 1024));
 
+            //public PooledByteBufAllocator(boolean preferDirect, int nHeapArena, int nDirectArena, int pageSize, int maxOrder) {
+
 
             m_bootstrap.handler(new ChannelInitializer() {
                 @Override
@@ -170,6 +174,7 @@ public class NettyChronicleSink2 implements Chronicle {
      */
     private class ExcerptHandler extends ChannelInboundHandlerAdapter {
         public static final int INDEX_SIZE = 8;
+        public static final int SIZE_SIZE = 4;
         public static final int MIN_SIZE = 4 + 8;
         public static final int MIN_SIZE_FIRST = MIN_SIZE + 8;
 
@@ -213,11 +218,13 @@ public class NettyChronicleSink2 implements Chronicle {
                         LOGGER.debug("reallocation : {} us", end-start);
                     }
 
-                    long start = System.nanoTime();
+                    //long start = System.nanoTime();
                     m_data.writeBytes(buf);
-                    long end = System.nanoTime();
+                    //long end = System.nanoTime();
 
-                    LOGGER.debug("copy : {} us", end-start);
+                    //LOGGER.debug("copy : {} us", end-start);
+
+                    buf.release();
                 }
 
                 decode(m_data);
@@ -288,14 +295,25 @@ public class NettyChronicleSink2 implements Chronicle {
                     throw new StreamCorruptedException("size was " + size);
                 }
 
-                if(data.readableBytes() >= size + 4) {
-                    byte[] buffer = new byte[size];
-                    data.readerIndex(sizeOffset + 4);
-                    data.readBytes(buffer);
+                if(data.readableBytes() >= size + SIZE_SIZE) {
+                    if(data.nioBufferCount() > 0) {
+                        m_excerpt.startExcerpt(size);
+                        m_excerpt.write(data.nioBuffer(sizeOffset + SIZE_SIZE,size));
+                        m_excerpt.finish();
+                        m_data.readerIndex(sizeOffset + SIZE_SIZE + size);
+                    } else if(data.hasArray()) {
+                        m_excerpt.startExcerpt(size);
+                        m_excerpt.write(data.array(),sizeOffset + SIZE_SIZE,size);
+                        m_excerpt.finish();
+                    } else {
+                        byte[] buffer = new byte[size];
+                        data.readerIndex(sizeOffset + 4);
+                        data.readBytes(buffer);
 
-                    m_excerpt.startExcerpt(buffer.length);
-                    m_excerpt.write(buffer);
-                    m_excerpt.finish();
+                        m_excerpt.startExcerpt(buffer.length);
+                        m_excerpt.write(buffer);
+                        m_excerpt.finish();
+                    }
                 } else {
                     break;
                 }

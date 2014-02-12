@@ -18,6 +18,8 @@ package com.github.lburgazzoli.sandbox.hft.chronicle.tcp;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ExcerptAppender;
 import net.openhft.chronicle.ExcerptTailer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,6 +27,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  */
 public class ChronicleTcp {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleTcp.class);
+
     public static final String BASEPATH    = "./data/chronicle/tcp";
     public static final int    LOOPS       = 5;
     public static final int    UPDATES     = 10000000;
@@ -107,8 +111,8 @@ public class ChronicleTcp {
 
         public void read() {
             if(m_excerpt.nextIndex()) {
-                char ch = (char) m_excerpt.readByte();
-                switch (ch) {
+                char code = (char) m_excerpt.readByte();
+                switch (code) {
                     case CODE_PX: {
                         //long   ts     = m_excerpt.readLong();
                         String symbol = m_excerpt.readEnum(String.class);
@@ -121,7 +125,7 @@ public class ChronicleTcp {
                         break;
                     }
                     default:
-                        throw new AssertionError("Unexpected code " + ch);
+                        throw new AssertionError("Unexpected code <" + code + ">");
                 }
             }
 
