@@ -48,8 +48,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  *
  */
-public class NettyChronicleSink1 implements Chronicle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyChronicleSink1.class);
+public class NettyCodecChronicleSink implements Chronicle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NettyCodecChronicleSink.class);
 
     private final Chronicle m_chronicle;
     private final ExcerptAppender m_excerpt;
@@ -65,7 +65,7 @@ public class NettyChronicleSink1 implements Chronicle {
      * @param host
      * @param port
      */
-    public NettyChronicleSink1(final Chronicle chronicle, final String host, final int port) throws IOException {
+    public NettyCodecChronicleSink(final Chronicle chronicle, final String host, final int port) throws IOException {
         m_chronicle = chronicle;
         m_excerpt = m_chronicle.createAppender();
         m_host = host;

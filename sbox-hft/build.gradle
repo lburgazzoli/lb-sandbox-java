@@ -10,30 +10,33 @@ dependencies {
 //
 // *****************************************************************************
 
-task hftChronicleDefaultServer(dependsOn: classes) << {
+task hftChronicleTcpServer(dependsOn: classes) << {
     javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleDefaultTcpSourceMain'
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleTcpSourceMain'
         classpath = project.runtimeClasspath
     }
 }
 
-task hftChronicleDefaultSink(dependsOn: classes) << {
+task hftChronicleTcpSink(dependsOn: classes) << {
     javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleDefaultTcpSinkMain'
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleTcpSinkMain'
         classpath = project.runtimeClasspath
+        args      = ['default']
     }
 }
 
-task hftChronicleNettySink1(dependsOn: classes) << {
+task hftChronicleNettyCodecSink(dependsOn: classes) << {
     javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleNettyTcpSinkMain1'
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleTcpSinkMain'
         classpath = project.runtimeClasspath
+        args      = ['codec']
     }
 }
 
-task hftChronicleNettySink2(dependsOn: classes) << {
+task hftChronicleNettyHandlerSink(dependsOn: classes) << {
     javaexec {
-        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleNettyTcpSinkMain2'
+        main      = 'com.github.lburgazzoli.sandbox.hft.chronicle.tcp.ChronicleTcpSinkMain'
         classpath = project.runtimeClasspath
+        args      = ['handler']
     }
 }

@@ -30,7 +30,7 @@ public class ChronicleTcp {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChronicleTcp.class);
 
     public static final String BASEPATH    = "./data/chronicle/tcp";
-    public static final int    LOOPS       = 5;
+    public static final int    LOOPS       = 10;
     public static final int    UPDATES     = 10000000;
     public static final int    PORT        = 12345;
     public static final char   CODE_PX     = 'P';
@@ -80,12 +80,12 @@ public class ChronicleTcp {
         public void write(long ts, String symbol, double bp, int bq, double ap, int aq) {
             m_excerpt.startExcerpt();
             m_excerpt.writeByte(CODE_PX);
-            //m_excerpt.writeLong(ts);
+            m_excerpt.writeLong(ts);
             m_excerpt.writeEnum(symbol);
-            //m_excerpt.writeDouble(bp);
-            //m_excerpt.writeInt(bq);
-            //m_excerpt.writeDouble(ap);
-            //m_excerpt.writeInt(aq);
+            m_excerpt.writeDouble(bp);
+            m_excerpt.writeInt(bq);
+            m_excerpt.writeDouble(ap);
+            m_excerpt.writeInt(aq);
             m_excerpt.finish();
         }
     }
@@ -114,12 +114,12 @@ public class ChronicleTcp {
                 char code = (char) m_excerpt.readByte();
                 switch (code) {
                     case CODE_PX: {
-                        //long   ts     = m_excerpt.readLong();
+                        long   ts     = m_excerpt.readLong();
                         String symbol = m_excerpt.readEnum(String.class);
-                        //double bp     = m_excerpt.readDouble();
-                        //int    bq     = m_excerpt.readInt();
-                        //double ap     = m_excerpt.readDouble();
-                        //int    aq     = m_excerpt.readInt();
+                        double bp     = m_excerpt.readDouble();
+                        int    bq     = m_excerpt.readInt();
+                        double ap     = m_excerpt.readDouble();
+                        int    aq     = m_excerpt.readInt();
 
                         m_count.incrementAndGet();
                         break;

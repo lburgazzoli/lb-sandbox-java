@@ -18,7 +18,9 @@ package com.github.lburgazzoli.sandbox.hft.chronicle.tcp.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.AdaptiveRecvByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -28,7 +30,9 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.socket.oio.OioSocketChannel;
 import io.netty.util.ResourceLeakDetector;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.Excerpt;
@@ -48,8 +52,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  *
  */
-public class NettyChronicleSink2 implements Chronicle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyChronicleSink2.class);
+public class NettyHandlerChronicleSink implements Chronicle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NettyHandlerChronicleSink.class);
 
     private final Chronicle m_chronicle;
     private final ExcerptAppender m_excerpt;
@@ -65,7 +69,7 @@ public class NettyChronicleSink2 implements Chronicle {
      * @param host
      * @param port
      */
-    public NettyChronicleSink2(final Chronicle chronicle, final String host, final int port) throws IOException {
+    public NettyHandlerChronicleSink(final Chronicle chronicle, final String host, final int port) throws IOException {
         m_chronicle = chronicle;
         m_excerpt = m_chronicle.createAppender();
         m_host = host;
@@ -131,14 +135,13 @@ public class NettyChronicleSink2 implements Chronicle {
             m_bootstrap = new Bootstrap();
             m_bootstrap.group(new NioEventLoopGroup());
             m_bootstrap.channel(NioSocketChannel.class);
-            m_bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
+            m_bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
             m_bootstrap.option(ChannelOption.TCP_NODELAY,true);
             m_bootstrap.option(ChannelOption.SO_RCVBUF,256 * 1024);
-            m_bootstrap.option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(true));
+
             m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR,new FixedRecvByteBufAllocator(256 * 1024));
-
-            //public PooledByteBufAllocator(boolean preferDirect, int nHeapArena, int nDirectArena, int pageSize, int maxOrder) {
-
+            //m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR, AdaptiveRecvByteBufAllocator.DEFAULT);
+            m_bootstrap.option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(true));
 
             m_bootstrap.handler(new ChannelInitializer() {
                 @Override
@@ -218,18 +221,22 @@ public class NettyChronicleSink2 implements Chronicle {
                         LOGGER.debug("reallocation : {} us", end-start);
                     }
 
+                    //int oldrb = m_data.readableBytes();
                     //long start = System.nanoTime();
-                    m_data.writeBytes(buf);
-                    //long end = System.nanoTime();
 
-                    //LOGGER.debug("copy : {} us", end-start);
+                    m_data.writeBytes(buf);
+
+                    //long end = System.nanoTime();
+                    //int newrb = m_data.readableBytes();
+
+                    //LOGGER.debug("copy : old={}, new={}, delta={}, time={}us", oldrb,newrb,newrb - oldrb,end-start);
 
                     buf.release();
                 }
 
                 decode(m_data);
 
-                if(m_data != null && !m_data.isReadable()) {
+                if(!m_data.isReadable()) {
                     m_data.release();
                     m_data = null;
                 }
@@ -281,10 +288,10 @@ public class NettyChronicleSink2 implements Chronicle {
                 int size = data.getInt(sizeOffset);
                 switch (size) {
                     case -128:
-                        LOGGER.debug("... received inSync");
+                        m_data.readerIndex(sizeOffset + SIZE_SIZE);
                         return;
                     case -127:
-                        LOGGER.debug("... received padded");
+                        m_data.readerIndex(sizeOffset + SIZE_SIZE);
                         m_excerpt.startExcerpt(((IndexedChronicle)m_chronicle).config().dataBlockSize() - 1);
                         return;
                     default:
