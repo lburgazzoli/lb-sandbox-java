@@ -15,12 +15,12 @@
  */
 package com.github.lburgazzoli.sandbox.hft.chronicle;
 
-import net.openhft.chronicle.Excerpt;
 import net.openhft.chronicle.ExcerptAppender;
 import net.openhft.chronicle.IndexedChronicle;
-import net.openhft.chronicle.tools.ChronicleTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  *
@@ -33,48 +33,32 @@ public class IndexedChronicleMain {
     //
     // *************************************************************************
 
-    private static void write(int data) throws Exception {
-        IndexedChronicle ic = new IndexedChronicle(BASEPATH);
-        ExcerptAppender ex = ic.createAppender();
-        ex.startExcerpt(4);
-        ex.writeInt(data);
-        ex.finish();
-
-        LOGGER.debug("write.index = {}",ex.index());
-    }
-
-    public static void read() throws Exception {
-        IndexedChronicle ic = new IndexedChronicle(BASEPATH);
-        Excerpt ex = ic.createExcerpt();
-
-        hasNext(ex);
-        hasNext(ex);
-        hasNext(ex);
-    }
-
-    public static boolean hasNext(Excerpt ex) throws Exception {
-        long    index   = ex.index();
-        boolean hasNext = ex.nextIndex();
-        ex.index(index);
-
-        LOGGER.debug("index : hasNext={},before={},after={}",hasNext,index,ex.index());
-
-        return hasNext;
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
     public static void main(String[] args) {
         try {
-            write(0);
-            write(1);
-            write(2);
+            for (String name : new String[]{BASEPATH + ".data", BASEPATH + ".index"}) {
+                File file = new File(name);
+                file.delete();
+            }
 
-            read();
+            IndexedChronicle chronicle = new IndexedChronicle(BASEPATH);
 
-            ChronicleTools.deleteOnExit(BASEPATH);
+            ExcerptAppender appender = chronicle.createAppender();
+            appender.startExcerpt();
+            appender.write(1);
+            appender.writeEnum("TestMessage");
+            appender.finish();
+
+            appender.startExcerpt();
+            appender.write(2);
+            appender.writeEnum("Hello World");
+            appender.finish();
+
+            appender.startExcerpt();
+            appender.write(3);
+            appender.writeEnum("Bye for now");
+            appender.finish();
+
+            chronicle.close();
 
         } catch(Exception e) {
             LOGGER.warn("Main Exception", e);
