@@ -1,0 +1,41 @@
+
+dependencies {
+    compile "org.apache.openjpa:openjpa:$openjpaVersion"
+    compile "org.hsqldb:hsqldb:$hsqldbVersion"
+
+    testCompile "junit:junit:$junitVersion"
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+/*
+task openJpaEnhance(dependsOn: classes) << {
+    ant.taskdef(
+            name      : 'openJpaEnhancerTask',
+            classpath : project.runtimeClasspath.asPath,
+            classname : 'org.apache.openjpa.ant.PCEnhancerTask'
+    )
+
+    ant.openJpaEnhancerTask(
+            classpath : project.runtimeClasspath.asPath
+    )
+}
+
+task openJpaLog4j(dependsOn: openJpaEnhance) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.jpa.openjpa.OpenJpaMain'
+        classpath = project.runtimeClasspath
+        args      = ['log4j']
+    }
+}
+
+task openJpaSlf4j(dependsOn: openJpaEnhance) << {
+    javaexec {
+        main      = 'com.github.lburgazzoli.sandbox.jpa.openjpa.OpenJpaMain'
+        classpath = project.runtimeClasspath
+        args      = ['slf4j']
+    }
+}
+*/
