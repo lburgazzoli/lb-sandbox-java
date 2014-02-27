@@ -8,8 +8,6 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion"
     compile "org.projectreactor:reactor-core:$reactorVersion"
     compile "org.projectreactor:reactor-tcp:$reactorVersion"
-    compile "net.openhft:chronicle:$openHftChronicleVersion"
-    compile "net.openhft:lang:$openHftLangVersion"
 
     testCompile "junit:junit:$junitVersion"
 }
