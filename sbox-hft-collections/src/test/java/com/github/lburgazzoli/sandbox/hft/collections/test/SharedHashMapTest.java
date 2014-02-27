@@ -102,8 +102,8 @@ public class SharedHashMapTest {
 
         assertTrue(cs1 == cs2);
         assertTrue(cs1 != cs3);
-        assertEquals(cs1,cs2);
-        assertEquals(cs1,cs3);
+        assertEquals(cs1.toString(),cs2.toString());
+        assertEquals(cs1.toString(),cs3.toString());
 
         map.close();
     }
