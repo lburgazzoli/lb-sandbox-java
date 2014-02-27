@@ -94,14 +94,23 @@ public class SharedHashMapTest {
             getSharedMap(entries, 128, 24,Integer.class,CharSequence.class);
 
         CharSequence cs1 = new StringBuilder("MyValue");
-        CharSequence cs2 = map.acquireUsing(new Integer(1), cs1);
-        CharSequence cs3 = map.getUsing(new Integer(1), new StringBuilder());
+        CharSequence cs2 = map.acquireUsing(1, cs1);
+        CharSequence cs3 = map.getUsing(1, new StringBuilder());
 
         assertNotNull(cs2);
         assertNotNull(cs3);
 
         assertTrue(cs1 == cs2);
         assertTrue(cs1 != cs3);
+
+        assertEquals("MyValue".length(),cs1.length());
+        assertEquals("MyValue".length(),cs2.length());
+        assertEquals("MyValue".length(),cs3.length());
+
+        assertEquals("MyValue",cs1.toString());
+        assertEquals("MyValue",cs2.toString());
+        assertEquals("MyValue",cs3.toString());
+
         assertEquals(cs1.toString(),cs2.toString());
         assertEquals(cs1.toString(),cs3.toString());
 

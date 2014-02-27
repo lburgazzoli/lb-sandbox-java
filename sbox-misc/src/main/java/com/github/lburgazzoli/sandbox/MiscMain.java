@@ -15,13 +15,16 @@
  */
 package com.github.lburgazzoli.sandbox;
 
-import org.apache.commons.io.HexDump;
-
 /**
  */
-public class HexDumpMain {
+public class MiscMain {
     public static void main(String[] args) throws Exception {
-        HexDump.dump(
-            "1234567890myString".getBytes(),0,System.out,0);
+        CharSequence cs1 = new StringBuffer("test").toString();
+        CharSequence cs2 = new StringBuffer("test");
+
+        System.out.println("length1   : " + cs1.length());
+        System.out.println("toString1 : " + cs1.toString());
+        System.out.println("length2   : " + cs2.length());
+        System.out.println("toString2 : " + cs2.toString());
     }
 }
