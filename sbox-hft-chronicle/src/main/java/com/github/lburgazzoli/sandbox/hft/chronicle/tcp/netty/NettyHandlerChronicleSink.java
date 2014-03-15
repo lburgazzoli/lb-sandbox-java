@@ -140,7 +140,6 @@ public class NettyHandlerChronicleSink implements Chronicle {
             m_bootstrap.option(ChannelOption.SO_RCVBUF,256 * 1024);
 
             m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR,new FixedRecvByteBufAllocator(256 * 1024));
-            //m_bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR, AdaptiveRecvByteBufAllocator.DEFAULT);
             m_bootstrap.option(ChannelOption.ALLOCATOR,new PooledByteBufAllocator(true));
 
             m_bootstrap.handler(new ChannelInitializer() {
@@ -221,15 +220,7 @@ public class NettyHandlerChronicleSink implements Chronicle {
                         LOGGER.debug("reallocation : {} us", end-start);
                     }
 
-                    //int oldrb = m_data.readableBytes();
-                    //long start = System.nanoTime();
-
                     m_data.writeBytes(buf);
-
-                    //long end = System.nanoTime();
-                    //int newrb = m_data.readableBytes();
-
-                    //LOGGER.debug("copy : old={}, new={}, delta={}, time={}us", oldrb,newrb,newrb - oldrb,end-start);
 
                     buf.release();
                 }

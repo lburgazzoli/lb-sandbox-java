@@ -1,6 +1,6 @@
 
 dependencies {
-    compile "net.openhft:lang:6.2-SNAPSHOT"
-    compile "net.openhft:collections:2.0.1-SNAPSHOT"
+    compile "net.openhft:lang:6.3.2"
+    compile "net.openhft:collections:3.0c"
 }
 

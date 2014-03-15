@@ -14,7 +14,7 @@ subprojects {
 
     project.ext.commonsLang3Version       = '3.2.1'
     project.ext.commonsIoVersion          = '2.4'
-    project.ext.slf4jVersion              = '1.7.5'
+    project.ext.slf4jVersion              = '1.7.6'
     project.ext.log4jVersion              = '1.2.17'
     project.ext.jacksonVersion            = '2.3.1'
     project.ext.hazelcastVersion          = '3.1.6'
@@ -33,6 +33,7 @@ subprojects {
     project.ext.nettyVersion              = '4.0.17.Final'
     project.ext.javassistVersion          = '3.18.1-GA'
     project.ext.guavaVersion              = '15.0'
+    project.ext.jeromqVersion             = '0.3.2'
 
     // *************************************************************************
     //
@@ -65,21 +66,18 @@ subprojects {
     }
 
     dependencies {
-        // Logging
         compile "org.slf4j:slf4j-api:$slf4jVersion"
         compile "org.slf4j:slf4j-ext:$slf4jVersion"
         compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
         compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
         compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
         compile "log4j:log4j:$log4jVersion"
-        // OSGi
         compile "org.osgi:org.osgi.core:$osgiVersion"
         compile "org.osgi:org.osgi.compendium:$osgiVersion"
-        // Utilities
         compile "org.apache.commons:commons-lang3:$commonsLang3Version"
         compile "commons-io:commons-io:$commonsIoVersion"
         compile "com.google.guava:guava:$guavaVersion"
-        // Unit tests
+
         testCompile "junit:junit:$junitVersion"
     }
 }
