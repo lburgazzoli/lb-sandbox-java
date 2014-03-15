@@ -1,7 +1,8 @@
 
 dependencies {
-    compile "net.openhft:chronicle:$openHftChronicleVersion"
-    compile "net.openhft:lang:$openHftLangVersion"
+    compile "net.openhft:chronicle:2.0.3"
+    compile "net.openhft:lang:6.1.4"
+    //compile "net.openhft:collections:$openHftCollectionsVersion"
     compile "io.netty:netty-all:$nettyVersion"
     compile "org.javassist:javassist:$javassistVersion"
 }

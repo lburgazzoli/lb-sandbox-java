@@ -1,0 +1,6 @@
+
+dependencies {
+    compile "net.openhft:lang:6.2-SNAPSHOT"
+    compile "net.openhft:collections:2.0.1-SNAPSHOT"
+}
+

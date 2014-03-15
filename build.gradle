@@ -12,26 +12,27 @@ subprojects {
 
     sourceCompatibility = 1.7
 
-    project.ext.slf4jVersion            = '1.7.5'
-    project.ext.log4jVersion            = '1.2.17'
-    project.ext.jacksonVersion          = '2.3.1'
-    project.ext.hazelcastVersion        = '3.1.5'
-    project.ext.osgiVersion             = '5.0.0'
-    project.ext.reactorVersion          = '1.0.0.RELEASE'
-    project.ext.openjpaVersion          = '2.3.0'
-    project.ext.hsqldbVersion           = '2.3.1'
-    project.ext.derbyVersion            = '10.10.1.1'
-    project.ext.h2Version               = '1.3.174'
-    project.ext.openHftChronicleVersion = '2.0.3'
-    project.ext.openHftLangVersion      = '6.1.4'
-    project.ext.hibernateVersion        = '4.3.1.Final'
-    project.ext.hikariCPVersion         = '1.2.8'
-    project.ext.junitVersion            = '4.11'
-    project.ext.batooVersion            = '2.0.1.3_1-SNAPSHOT'
-    project.ext.bonecpVersion           = '0.8.0.RELEASE'
-    project.ext.apacheCamelVersion      = '2.12.2'
-    project.ext.nettyVersion            = '4.0.15.Final'
-    project.ext.javassistVersion        = '3.18.1-GA'
+    project.ext.commonsLang3Version       = '3.2.1'
+    project.ext.commonsIoVersion          = '2.4'
+    project.ext.slf4jVersion              = '1.7.5'
+    project.ext.log4jVersion              = '1.2.17'
+    project.ext.jacksonVersion            = '2.3.1'
+    project.ext.hazelcastVersion          = '3.1.6'
+    project.ext.osgiVersion               = '5.0.0'
+    project.ext.reactorVersion            = '1.0.0.RELEASE'
+    project.ext.openjpaVersion            = '2.3.0'
+    project.ext.hsqldbVersion             = '2.3.1'
+    project.ext.derbyVersion              = '10.10.1.1'
+    project.ext.h2Version                 = '1.3.174'
+    project.ext.hibernateVersion          = '4.3.1.Final'
+    project.ext.hikariCPVersion           = '1.3.0'
+    project.ext.junitVersion              = '4.11'
+    project.ext.batooVersion              = '2.0.1.3_1-SNAPSHOT'
+    project.ext.bonecpVersion             = '0.8.0.RELEASE'
+    project.ext.apacheCamelVersion        = '2.12.3'
+    project.ext.nettyVersion              = '4.0.17.Final'
+    project.ext.javassistVersion          = '3.18.1-GA'
+    project.ext.guavaVersion              = '15.0'
 
     // *************************************************************************
     //
@@ -64,17 +65,21 @@ subprojects {
     }
 
     dependencies {
+        // Logging
         compile "org.slf4j:slf4j-api:$slf4jVersion"
         compile "org.slf4j:slf4j-ext:$slf4jVersion"
         compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
         compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
         compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
         compile "log4j:log4j:$log4jVersion"
-        compile "org.apache.commons:commons-lang3:3.2"
+        // OSGi
         compile "org.osgi:org.osgi.core:$osgiVersion"
         compile "org.osgi:org.osgi.compendium:$osgiVersion"
-        compile "com.google.guava:guava:15.0"
-
+        // Utilities
+        compile "org.apache.commons:commons-lang3:$commonsLang3Version"
+        compile "commons-io:commons-io:$commonsIoVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+        // Unit tests
         testCompile "junit:junit:$junitVersion"
     }
 }
