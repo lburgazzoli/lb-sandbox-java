@@ -12,11 +12,11 @@ subprojects {
 
     sourceCompatibility = 1.7
 
-    project.ext.commonsLang3Version       = '3.2.1'
+    project.ext.commonsLang3Version       = '3.3'
     project.ext.commonsIoVersion          = '2.4'
     project.ext.slf4jVersion              = '1.7.6'
     project.ext.log4jVersion              = '1.2.17'
-    project.ext.jacksonVersion            = '2.3.1'
+    project.ext.jacksonVersion            = '2.3.2'
     project.ext.hazelcastVersion          = '3.1.6'
     project.ext.osgiVersion               = '5.0.0'
     project.ext.reactorVersion            = '1.0.0.RELEASE'
@@ -24,15 +24,15 @@ subprojects {
     project.ext.hsqldbVersion             = '2.3.1'
     project.ext.derbyVersion              = '10.10.1.1'
     project.ext.h2Version                 = '1.3.174'
-    project.ext.hibernateVersion          = '4.3.1.Final'
-    project.ext.hikariCPVersion           = '1.3.0'
+    project.ext.hibernateVersion          = '4.3.4.Final'
+    project.ext.hikariCPVersion           = '1.3.3'
     project.ext.junitVersion              = '4.11'
     project.ext.batooVersion              = '2.0.1.3_1-SNAPSHOT'
     project.ext.bonecpVersion             = '0.8.0.RELEASE'
     project.ext.apacheCamelVersion        = '2.12.3'
     project.ext.nettyVersion              = '4.0.17.Final'
     project.ext.javassistVersion          = '3.18.1-GA'
-    project.ext.guavaVersion              = '15.0'
+    project.ext.guavaVersion              = '16.0.1'
     project.ext.jeromqVersion             = '0.3.2'
 
     // *************************************************************************
