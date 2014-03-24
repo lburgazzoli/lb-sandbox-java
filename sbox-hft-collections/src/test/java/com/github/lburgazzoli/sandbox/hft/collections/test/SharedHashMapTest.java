@@ -15,11 +15,15 @@
  */
 package com.github.lburgazzoli.sandbox.hft.collections.test;
 
+import net.openhft.collections.SharedHashMap;
+import net.openhft.collections.SharedHashMapBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -36,6 +40,32 @@ public class SharedHashMapTest {
 
     @After
     public void after() {
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    @Test
+    public void testSharedHashMapConfiguration() throws IOException {
+        final File path = new File(FileUtils.getTempDirectoryPath(),"shm-config");
+        path.delete();
+        path.deleteOnExit();
+
+        final SharedHashMap<Integer,SharedHashMapData> shm = new SharedHashMapBuilder()
+            .entries(10)
+            .entrySize(64)
+            .minSegments(10)
+            .create(
+                path,
+                Integer.class,
+                SharedHashMapData.class);
+
+
+        SharedHashMapData shmd = shm.acquireUsing(0,new SharedHashMapData(64));
+
+        shm.close();
+
     }
 
     // *************************************************************************
