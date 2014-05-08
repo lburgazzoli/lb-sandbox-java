@@ -6,10 +6,10 @@
 dependencies {
     compile "javax.validation:validation-api:1.0.0.GA"
     compile "org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.1"
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
-    compile "org.batoo.jpa:batoo-jpa:$batooVersion"
-    compile "com.jolbox:bonecp:$bonecpVersion"
-    compile "com.zaxxer:HikariCP:$hikariCPVersion"
+    compile "org.hsqldb:hsqldb:$versions.hsqldb"
+    compile "org.batoo.jpa:batoo-jpa:$versions.batoo"
+    compile "com.jolbox:bonecp:$versions.bonecp"
+    compile "com.zaxxer:HikariCP:$versions.hikaricp"
 }
 
 // *****************************************************************************

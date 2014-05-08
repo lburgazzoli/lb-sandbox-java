@@ -1,0 +1,18 @@
+apply plugin: 'application'
+
+dependencies {
+    compile "org.springframework:spring-context:$versions.spring"
+    compile "com.hazelcast:hazelcast-all:$versions.hazelcast"
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+mainClassName = 'com.github.lburgazzoli.examples.spring4.groovy.hz.HzMain'
+
+run {
+    workingDir = "$projectDir"
+    classpath  = project.runtimeClasspath
+    args       = [ "$projectDir/conf/hz/hz-cfg.groovy" ]
+}

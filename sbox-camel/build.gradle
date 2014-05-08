@@ -1,9 +1,9 @@
 
 dependencies {
-    compile "org.apache.camel:camel-core:${apacheCamelVersion}"
-    compile "org.apache.camel:camel-blueprint:${apacheCamelVersion}"
-    compile "org.apache.camel:camel-beanio:${apacheCamelVersion}"
-    compile "org.apache.camel:camel-ftp:${apacheCamelVersion}"
-    compile "org.apache.camel:camel-quartz2:${apacheCamelVersion}"
-    compile "org.apache.camel:camel-script:${apacheCamelVersion}"
+    compile "org.apache.camel:camel-core:$versions.camel"
+    compile "org.apache.camel:camel-blueprint:$versions.camel"
+    compile "org.apache.camel:camel-beanio:$versions.camel"
+    compile "org.apache.camel:camel-ftp:$versions.camel"
+    compile "org.apache.camel:camel-quartz2:$versions.camel"
+    compile "org.apache.camel:camel-script:$versions.camel"
 }

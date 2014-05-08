@@ -4,13 +4,11 @@
 // *****************************************************************************
 
 dependencies {
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
-    compile "org.hibernate:hibernate-core:$hibernateVersion"
-    compile "org.hibernate:hibernate-entitymanager:$hibernateVersion"
-    compile "org.hibernate:hibernate-c3p0:$hibernateVersion"
-    compile "com.zaxxer:HikariCP:$hikariCPVersion"
-    compile "org.apache.derby:derby:$derbyVersion"
-    compile "com.h2database:h2:$h2Version"
+    compile "org.hsqldb:hsqldb:$versions.hsqldb"
+    compile "org.hibernate:hibernate-core:$versions.hibernate"
+    compile "org.hibernate:hibernate-entitymanager:$versions.hibernate"
+    compile "org.hibernate:hibernate-c3p0:$versions.hibernate"
+    compile "com.zaxxer:HikariCP:$versions.hikaricp"
 }
 
 // *****************************************************************************

@@ -2,8 +2,8 @@
 dependencies {
     compile "net.openhft:chronicle:2.0.3"
     compile "net.openhft:lang:6.3.2"
-    compile "io.netty:netty-all:$nettyVersion"
-    compile "org.javassist:javassist:$javassistVersion"
+    compile "io.netty:netty-all:$versions.netty"
+    compile "org.javassist:javassist:$versions.javassist"
 }
 
 // *****************************************************************************

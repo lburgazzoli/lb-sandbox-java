@@ -1,5 +1,5 @@
 
 dependencies {
-    compile "org.projectreactor:reactor-core:$reactorVersion"
-    compile "org.projectreactor:reactor-tcp:$reactorVersion"
+    compile "org.projectreactor:reactor-core:$versions.springReactor"
+    compile "org.projectreactor:reactor-net:$versions.springReactor"
 }

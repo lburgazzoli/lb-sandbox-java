@@ -1,0 +1,17 @@
+apply plugin: 'application'
+
+dependencies {
+    compile "org.springframework:spring-context:$versions.spring"
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+mainClassName = 'com.github.lburgazzoli.examples.spring4.groovy.Main'
+
+run {
+    workingDir = "$projectDir"
+    classpath  = project.runtimeClasspath
+    args       = [ "file:$projectDir/conf/instance-1/instance-1.groovy" ]
+}

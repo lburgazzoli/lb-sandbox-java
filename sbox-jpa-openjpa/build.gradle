@@ -1,9 +1,9 @@
 
 dependencies {
-    compile "org.apache.openjpa:openjpa:$openjpaVersion"
-    compile "org.hsqldb:hsqldb:$hsqldbVersion"
+    compile "org.apache.openjpa:openjpa:$versions.openjpa"
+    compile "org.hsqldb:hsqldb:$versions.hsqldb"
 
-    testCompile "junit:junit:$junitVersion"
+    testCompile "junit:junit:$versions.junit"
 }
 
 // *****************************************************************************
