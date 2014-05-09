@@ -15,20 +15,15 @@
  */
 package com.github.lburgazzoli.examples.spring4.groovy.hz
 
-import com.hazelcast.config.AwsConfig
-import com.hazelcast.config.Config
-import com.hazelcast.config.GroupConfig
-import com.hazelcast.config.InterfacesConfig
-import com.hazelcast.config.JoinConfig
-import com.hazelcast.config.MulticastConfig
-import com.hazelcast.config.NetworkConfig
-import com.hazelcast.config.TcpIpConfig
+import com.hazelcast.config.*
+import com.hazelcast.core.EntryAdapter
+import com.hazelcast.core.EntryEvent
 import com.hazelcast.core.Hazelcast
+import com.hazelcast.core.HazelcastInstance
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.support.GenericGroovyApplicationContext
 import org.springframework.core.io.FileSystemResource
-
 
 class HzMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(HzMain.class)
@@ -40,7 +35,12 @@ class HzMain {
         ctx.reader.beans {
             hzConfig(Config) {
                 properties = [
-                    'hazelcast.logging.type' : 'slf4j'
+                    'hazelcast.logging.type'      : 'slf4j',
+                    'hazelcast.memcache.enabled'  : 'false',
+                    'hazelcast.rest.enabled'      : 'false',
+                    'hazelcast.socket.keep.alive' : 'true' ,
+                    'hazelcast.socket.no.delay'   : 'true' ,
+                    'hazelcast.jmx'               : 'false',
                 ]
                 groupConfig = {
                     GroupConfig groupConfig ->
@@ -49,16 +49,18 @@ class HzMain {
                 }
                 networkConfig = {
                     NetworkConfig networkConfig ->
+                        portAutoIncrement = true
+
                         interfaces = {
                             InterfacesConfig interfacesConfig ->
-                                enabled = false
-                                interfaces = ["127.0.0.1"]
+                                enabled    = false
                         }
                         join = {
                             JoinConfig joinConfig ->
                                 multicastConfig = {
                                     MulticastConfig multicastConfig ->
-                                        enabled = false
+                                        enabled = true
+                                        trustedInterfaces = [ "eth0" ]
                                 }
                                 tcpIpConfig = {
                                     TcpIpConfig tcpIpConfig ->
@@ -70,6 +72,15 @@ class HzMain {
                                 }
                         }
                 }
+                mapConfigs = [
+                    'hz_map_1' : [
+                        name              : 'hz_map_1',
+                        backupCount       : 2,
+                        statisticsEnabled : true,
+                        timeToLiveSeconds : 5,
+                        evictionPolicy    : MapConfig.EvictionPolicy.LFU
+                    ] as MapConfig
+                ]
             }
 
             hzInstance(Hazelcast, hzConfig) { bean ->
@@ -80,8 +91,22 @@ class HzMain {
 
         ctx.refresh()
 
-        ctx.beanDefinitionNames.each {
-            LOGGER.info("bean : {}", it)
+        def hzi    = ctx.getBean('hzInstance',HazelcastInstance.class);
+        def hzMap1 = hzi.getMap('hz_map_1');
+        def hzMap2 = hzi.getMap('hz_map_2');
+
+        hzMap1.put('key','val')
+        hzMap1.addEntryListener(new EntryAdapter<String,String>() {
+            void entryEvicted(EntryEvent<String,String> event) {
+                LOGGER.info("entryEvicted {}",event)
+            }
+        },false)
+
+        hzMap2.put('key','val1')
+
+        try {
+            Thread.sleep(15000)
+        } catch(Exception e) {
         }
 
         ctx.close()
