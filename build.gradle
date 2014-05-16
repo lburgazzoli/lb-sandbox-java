@@ -47,7 +47,8 @@ subprojects {
         batoo              : '2.0.1.3_1-SNAPSHOT',
         bonecp             : '0.8.0.RELEASE',
         openjpa            : '2.3.0',
-        javassist          : '3.18.1-GA'
+        javassist          : '3.18.1-GA',
+        jooq               : '3.3.2'
     ]
 
     // *************************************************************************

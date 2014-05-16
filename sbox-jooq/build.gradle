@@ -1,0 +1,32 @@
+apply plugin: 'jooq'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jooq:jooq-codegen-gradle:$versions.jooq"
+        classpath "org.hsqldb:hsqldb:$versions.hsqldb"
+    }
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+jooq {
+    jdbc {
+        url      'jdbc:hsqldb:mem:jooq;shutdown=true'
+        driver   'org.hsqldb.jdbc.JDBCDriver'
+        user     'sa'
+        password ''
+    }
+    generator {
+        database {
+            name        'org.jooq.util.hsqldb.HSQLDBDatabase'
+            inputSchema 'example'
+            includes    '.*'
+        }
+    }
+}
