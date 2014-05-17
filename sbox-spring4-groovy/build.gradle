@@ -8,7 +8,7 @@ dependencies {
 //
 // *****************************************************************************
 
-mainClassName = 'com.github.lburgazzoli.examples.spring4.groovy.Main'
+mainClassName = 'com.github.lburgazzoli.sandbox.spring4.groovy.Main'
 
 run {
     workingDir = "$projectDir"

@@ -1,0 +1,5 @@
+
+CREATE TABLE TEST(
+    ID      INT,
+    DATA    VARCHAR
+);

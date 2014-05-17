@@ -1,0 +1,17 @@
+
+dependencies {
+    compile "com.h2database:h2:$versions.h2"
+    compile "org.jooq:jooq:$versions.jooq"
+    compile "org.jooq:jooq-meta:$versions.jooq"
+    compile "org.jooq:jooq-codegen:$versions.jooq"
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+task codegen(type: JavaExec) {
+    main       = 'com.github.lburgazzoli.sandbox.jooq.JooqCodeGen'
+    classpath  = project.runtimeClasspath
+    workingDir = "$projectDir"
+}

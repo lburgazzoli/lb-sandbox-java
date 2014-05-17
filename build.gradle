@@ -35,6 +35,7 @@ subprojects {
         hibernate          : '4.3.5.Final',
         hikaricp           : '1.3.8',
         hsqldb             : '2.3.2',
+        h2                 : '1.4.178',
         netty              : '4.0.19.Final',
         junit              : '4.11',
         kryo               : '2.23.0',
@@ -92,7 +93,7 @@ subprojects {
         compile "org.apache.commons:commons-collections4:$versions.commonsCollections"
         compile "com.goldmansachs:gs-collections:$versions.gsCollections"
 
-        compile "org.codehaus.groovy:groovy:$versions.groovy"
+        compile "org.codehaus.groovy:groovy-all:$versions.groovy"
 
         testCompile "junit:junit:$versions.junit"
     }

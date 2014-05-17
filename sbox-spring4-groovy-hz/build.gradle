@@ -9,7 +9,7 @@ dependencies {
 //
 // *****************************************************************************
 
-mainClassName = 'com.github.lburgazzoli.examples.spring4.groovy.hz.HzMain'
+mainClassName = 'com.github.lburgazzoli.sandbox.spring4.groovy.hz.HzMain'
 
 run {
     workingDir = "$projectDir"

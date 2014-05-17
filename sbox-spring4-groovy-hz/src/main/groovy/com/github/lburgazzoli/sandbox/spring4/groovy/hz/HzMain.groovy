@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.examples.spring4.groovy.hz
+package com.github.lburgazzoli.sandbox.spring4.groovy.hz
 
 import com.hazelcast.config.*
 import com.hazelcast.core.EntryAdapter
