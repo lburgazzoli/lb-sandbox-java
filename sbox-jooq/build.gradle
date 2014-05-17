@@ -10,8 +10,16 @@ dependencies {
 //
 // *****************************************************************************
 
-task codegen(type: JavaExec) {
+task jooqCodeGen(type: JavaExec) {
     main       = 'com.github.lburgazzoli.sandbox.jooq.JooqCodeGen'
     classpath  = project.runtimeClasspath
     workingDir = "$projectDir"
+    args       = [ "$projectDir/src/main/resources/jooq-config.groovy" ]
+}
+
+task jooqMain(type: JavaExec) {
+    main       = 'com.github.lburgazzoli.sandbox.jooq.JooqMain'
+    classpath  = project.runtimeClasspath
+    workingDir = "$projectDir"
+    args       = [ "$projectDir/src/main/resources/jooq-config.groovy" ]
 }

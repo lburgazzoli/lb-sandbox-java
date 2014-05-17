@@ -20,25 +20,36 @@ import org.jooq.util.jaxb.*
 
 class JooqCodeGen {
     public static void main(String[] args) {
-        def cfg = new ConfigSlurper().parse(JooqConfig)
+        if(args.length == 1) {
+            def cfg = new ConfigSlurper().parse(new File(args[0]).toURI().toURL())
 
-        GenerationTool.main(
-            new Configuration()
-                .withJdbc(new Jdbc()
-                    .withDriver(cfg.db.driver)
-                    .withUrl(cfg.db.url)
-                    .withUser(cfg.db.pwd)
-                    .withPassword(""))
-                .withGenerator(new Generator()
-                    .withName("org.jooq.util.DefaultGenerator")
-                .withDatabase(new Database()
-                    .withName(cfg.db.jooq.database)
-                    .withIncludes(".*")
-                    .withExcludes("")
-                    .withInputSchema("PUBLIC"))
-                .withTarget(new Target()
-                    .withPackageName(cfg.db.jooq.pkg)
-                    .withDirectory(cfg.db.jooq.output))
-        ))
+            def gen = new Generate()
+            gen.deprecated = false
+            gen.fluentSetters = true
+            gen.instanceFields = true
+            gen.immutablePojos = true
+            gen.interfaces = true
+
+            GenerationTool.main(
+                new Configuration()
+                    .withJdbc(new Jdbc()
+                        .withDriver(cfg.db.driver)
+                        .withUrl(cfg.db.url)
+                        .withUser(cfg.db.pwd)
+                        .withPassword(""))
+                    .withGenerator(new Generator()
+                        .withGenerate(gen)
+                        .withName("org.jooq.util.DefaultGenerator")
+                    .withDatabase(new Database()
+                        .withDateAsTimestamp(true)
+                        .withName(cfg.db.jooq.database)
+                        .withIncludes(".*")
+                        .withExcludes("")
+                        .withInputSchema("PUBLIC"))
+                    .withTarget(new Target()
+                        .withPackageName(cfg.db.jooq.pkg)
+                        .withDirectory(cfg.db.jooq.output))
+                ))
+        }
     }
 }

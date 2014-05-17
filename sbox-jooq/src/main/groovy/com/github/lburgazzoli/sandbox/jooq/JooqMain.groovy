@@ -14,23 +14,33 @@
  * limitations under the License.
  */
 package com.github.lburgazzoli.sandbox.jooq
-import com.github.lburgazzoli.sandbox.jooq.db.tables.Test
+import com.github.lburgazzoli.sandbox.jooq.db.Tables
 import groovy.sql.Sql
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 
 class JooqMain {
     public static void main(String[] args) {
-        def cfg = new ConfigSlurper().parse(JooqConfig)
-        def sql = Sql.newInstance(cfg.db.url,cfg.db.usr,cfg.db.pwd,cfg.db.driver)
+        if(args.length == 1) {
+            def cfg = new ConfigSlurper().parse(new File(args[0]).toURI().toURL())
+            def sql = Sql.newInstance(cfg.db.url, cfg.db.usr, cfg.db.pwd, cfg.db.driver)
 
-        try {
-            def ctx    = DSL.using(sql.connection, SQLDialect.H2)
-            def result = ctx.select().from(Test).fetch()
+            try {
+                def ctx = DSL.using(sql.connection, SQLDialect.H2)
 
-            println result
-        } catch (Exception e) {
-            e.printStackTrace();
+                for(int i=1;i<10;i++) {
+                    ctx.insertInto(Tables.TEST, Tables.TEST.ID, Tables.TEST.DATA)
+                       .values(i, "Data_" + i)
+                       .values(i * 100, "Data_" + (i * 100))
+                       .execute()
+                }
+
+                for (def rec : ctx.selectFrom(Tables.TEST).orderBy(Tables.TEST.ID).fetch()) {
+                    println "> $rec.id, $rec.data"
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
