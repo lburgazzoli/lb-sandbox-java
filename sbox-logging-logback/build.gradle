@@ -1,0 +1,5 @@
+
+dependencies {
+    compile "ch.qos.logback:logback-core:$versions.logback"
+    compile "ch.qos.logback:logback-classic:$versions.logback"
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name = "STDOUT"
+              class = "ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d %contextName [%t] %level %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name = "FILE"
+              class = "ch.qos.logback.core.FileAppender">
+        <File>${java.io.tmpdir}/app.log</File>
+        <encoder>
+            <pattern>%d|%t|%c|%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
+

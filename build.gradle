@@ -3,7 +3,7 @@
 //
 // *****************************************************************************
 
-subprojects {
+configure(allprojects) { project ->
 
     apply plugin: 'java'
     apply plugin: 'groovy'
@@ -69,10 +69,10 @@ subprojects {
 
     repositories {
         maven { url 'file://C:/LBU/data/settings/maven_repo' }
-        mavenLocal()
 
-        maven { url 'http://repo1.maven.org/maven2' }
-        maven { url 'http://repo2.maven.org/maven2' }
+        mavenLocal()
+        mavenCentral()
+
         maven { url 'http://repo.springsource.org/release' }
         maven { url "http://repo.springsource.org/libs-milestone" }
     }
@@ -82,10 +82,6 @@ subprojects {
         compile "org.slf4j:slf4j-ext:$versions.slf4j"
         compile "org.slf4j:jul-to-slf4j:$versions.slf4j"
         compile "org.slf4j:jcl-over-slf4j:$versions.slf4j"
-
-        compile "org.apache.logging.log4j:log4j-api:$versions.log4j2"
-        compile "org.apache.logging.log4j:log4j-core:$versions.log4j2"
-        compile "org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j2"
 
         compile "com.google.guava:guava:$versions.guava"
         compile "org.apache.commons:commons-pool2:$versions.commonsPool"
@@ -109,6 +105,33 @@ subprojects {
         "-Xlint:unchecked",
         "-Xlint:deprecation",
     ]
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+configure(subprojects - project(":sbox-logging-logback")) { subproject ->
+    dependencies {
+        compile "org.slf4j:slf4j-api:$versions.slf4j"
+        compile "org.slf4j:slf4j-ext:$versions.slf4j"
+        compile "org.slf4j:jul-to-slf4j:$versions.slf4j"
+        compile "org.slf4j:jcl-over-slf4j:$versions.slf4j"
+
+        compile "org.apache.logging.log4j:log4j-api:$versions.log4j2"
+        compile "org.apache.logging.log4j:log4j-core:$versions.log4j2"
+        compile "org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j2"
+
+        compile "com.google.guava:guava:$versions.guava"
+        compile "org.apache.commons:commons-pool2:$versions.commonsPool"
+        compile "org.apache.commons:commons-lang3:$versions.commonsLang"
+        compile "org.apache.commons:commons-collections4:$versions.commonsCollections"
+        compile "com.goldmansachs:gs-collections:$versions.gsCollections"
+
+        compile "org.codehaus.groovy:groovy-all:$versions.groovy"
+
+        testCompile "junit:junit:$versions.junit"
+    }
 }
 
 // *****************************************************************************
