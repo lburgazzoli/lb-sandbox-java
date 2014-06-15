@@ -1,0 +1,5 @@
+
+dependencies {
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.quickfix:1.5.3_1"
+}
+
