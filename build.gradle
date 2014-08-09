@@ -51,7 +51,7 @@ configure(allprojects) { project ->
         openjpa            : '2.3.0',
         javassist          : '3.18.1-GA',
         jooq               : '3.4.2',
-        rxJava             : '0.19.6',
+        rxJava             : '0.20.0-RC4',
         rxNetty            : '0.3.11',
         osgi               : '5.0.0'
     ]
