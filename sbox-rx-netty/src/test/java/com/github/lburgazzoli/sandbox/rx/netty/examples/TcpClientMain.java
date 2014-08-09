@@ -15,12 +15,13 @@
  */
 package com.github.lburgazzoli.sandbox.rx.netty.examples;
 
-import io.reactivex.netty.RxNetty;
-import io.reactivex.netty.channel.ObservableConnection;
-import io.reactivex.netty.client.RxClient;
-import io.reactivex.netty.pipeline.PipelineConfigurators;
+import com.github.lburgazzoli.sandbox.rx.netty.TcpClient;
+import com.github.lburgazzoli.sandbox.rx.netty.TcpClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 public class TcpClientMain {
     public static final Logger LOGGER = LoggerFactory.getLogger(TcpClientMain.class);
@@ -30,25 +31,21 @@ public class TcpClientMain {
     // *************************************************************************
 
     public void run(final String[] args) throws Exception {
-        RxClient<String,String> client = RxNetty.createTcpClient(
-            "www.google.com",
-            80,
-            PipelineConfigurators.textOnlyConfigurator());
+        LOGGER.info(">>>> connecting");
 
-        client.connect()
-            .doOnCompleted(() -> {
-                System.out.println("--");
-                LOGGER.info("doOnCompleted");
-            })
-            .doOnError((final Throwable error) -> {
-                System.out.println("--");
-                LOGGER.warn("doOnError", error);
-            })
-            .doOnNext((final ObservableConnection<String,String> cnx) -> {
-                System.out.println("--");
-                LOGGER.warn("doOnNext", cnx);
-            }
+        final TcpClient client = new TcpClient(
+            new TcpClientConfig()
+                .addresses(new InetSocketAddress("localhost",9876))
+                .timeUnit(TimeUnit.MILLISECONDS)
+                .reconnectDelay(5, TimeUnit.SECONDS)
         );
+
+        client.start();
+
+        for(int i=0;i<100;i++) {
+            LOGGER.info(">>>> sleep...");
+            Thread.sleep(2500);
+        }
     }
 
     // *************************************************************************

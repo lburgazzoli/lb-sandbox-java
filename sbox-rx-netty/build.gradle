@@ -1,5 +1,6 @@
 
 dependencies {
+    compile "org.javassist:javassist:$versions.javassist"
     compile "com.netflix.rxjava:rx-java:$versions.rxJava"
     compile "com.netflix.rxnetty:rx-netty:$versions.rxNetty"
 }
