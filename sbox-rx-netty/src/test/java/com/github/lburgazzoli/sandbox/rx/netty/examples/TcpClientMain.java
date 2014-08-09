@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.sandbox.rx.netty.examples
+package com.github.lburgazzoli.sandbox.rx.netty.examples;
 
-import org.slf4j.Logger
+import io.reactivex.netty.RxNetty;
+import io.reactivex.netty.channel.ObservableConnection;
+import io.reactivex.netty.client.RxClient;
+import io.reactivex.netty.pipeline.PipelineConfigurators;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-class TcpClientMain {
+public class TcpClientMain {
     public static final Logger LOGGER = LoggerFactory.getLogger(TcpClientMain.class);
 
     // *************************************************************************
@@ -25,7 +30,25 @@ class TcpClientMain {
     // *************************************************************************
 
     public void run(final String[] args) throws Exception {
+        RxClient<String,String> client = RxNetty.createTcpClient(
+            "www.google.com",
+            80,
+            PipelineConfigurators.textOnlyConfigurator());
 
+        client.connect()
+            .doOnCompleted(() -> {
+                System.out.println("--");
+                LOGGER.info("doOnCompleted");
+            })
+            .doOnError((final Throwable error) -> {
+                System.out.println("--");
+                LOGGER.warn("doOnError", error);
+            })
+            .doOnNext((final ObservableConnection<String,String> cnx) -> {
+                System.out.println("--");
+                LOGGER.warn("doOnNext", cnx);
+            }
+        );
     }
 
     // *************************************************************************
