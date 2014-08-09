@@ -1,5 +1,7 @@
 
 dependencies {
+    compile "org.osgi:org.osgi.core:$versions.osgi"
+    compile "org.osgi:org.osgi.compendium:$versions.osgi"
     compile "org.apache.camel:camel-core:$versions.camel"
     compile "org.apache.camel:camel-blueprint:$versions.camel"
     compile "org.apache.camel:camel-beanio:$versions.camel"

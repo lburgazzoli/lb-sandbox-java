@@ -1,13 +1,13 @@
 
 dependencies {
     compile "com.hazelcast:hazelcast-all:$versions.hazelcast"
-    compile "com.fasterxml.jackson.core:jackson-core:$versions.jackson"
-    compile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+    compile "com.fasterxml.jackson.core:jackson-core:$versions.jacksonCore"
+    compile "com.fasterxml.jackson.core:jackson-databind:$versions.jacksonDatabind"
     compile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner:$versions.jackson"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$versions.jackson"
-    compile "org.projectreactor:reactor-core:$versions.reactor"
-    compile "org.projectreactor:reactor-net:$versions.reactor"
+    compile "org.projectreactor:reactor-core:$versions.springReactor"
+    compile "org.projectreactor:reactor-net:$versions.springReactor"
 
     testCompile "junit:junit:$versions.junit"
 }

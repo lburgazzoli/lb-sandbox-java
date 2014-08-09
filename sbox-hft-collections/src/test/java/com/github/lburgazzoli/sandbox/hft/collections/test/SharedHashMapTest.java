@@ -54,7 +54,7 @@ public class SharedHashMapTest {
 
         final SharedHashMap<Integer,SharedHashMapData> shm = new SharedHashMapBuilder()
             .entries(10)
-            .entrySize(64)
+            .entrySize(128)
             .minSegments(10)
             .create(
                 path,

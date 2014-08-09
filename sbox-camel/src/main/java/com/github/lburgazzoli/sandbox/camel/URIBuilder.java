@@ -16,9 +16,9 @@
 package com.github.lburgazzoli.sandbox.camel;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -64,7 +64,7 @@ public final class URIBuilder {
      * @return
      */
     public URIBuilder param(String key, Map<String,Object> cfg, String cfgKey) {
-        m_parameters.put(key, ObjectUtils.toString(cfg.get(cfgKey)));
+        m_parameters.put(key, Objects.toString(cfg.get(cfgKey)));
         return this;
     }
 

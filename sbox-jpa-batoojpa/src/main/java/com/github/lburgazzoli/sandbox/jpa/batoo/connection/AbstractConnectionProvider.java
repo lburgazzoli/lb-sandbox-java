@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import javax.sql.rowset.RowSetMetaDataImpl;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -107,8 +108,9 @@ public abstract class AbstractConnectionProvider extends AbstractDataSource {
     @Override
     public <T> T unwrap(Class<T> iface) {
         try {
+            RowSetMetaDataImpl impl;
             if (isWrapperFor(iface)) {
-                return (T) this;
+                return iface.cast(this);
             } else {
                 throw new RuntimeException("Cannot unwrap to requested type [" + iface.getName() + "]");
             }

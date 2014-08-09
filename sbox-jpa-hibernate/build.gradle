@@ -8,6 +8,8 @@ dependencies {
     compile "org.hibernate:hibernate-core:$versions.hibernate"
     compile "org.hibernate:hibernate-entitymanager:$versions.hibernate"
     compile "org.hibernate:hibernate-c3p0:$versions.hibernate"
+    compile "org.hibernate:hibernate-hikaricp:$versions.hibernate"
+
     compile "com.zaxxer:HikariCP:$versions.hikaricp"
 }
 
@@ -19,12 +21,6 @@ task hibernateJpaMainHikari(type: JavaExec) {
     main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
     classpath = project.runtimeClasspath
     args      = [ 'hikari' ]
-}
-
-task hibernateJpaMainHsql(type: JavaExec) {
-    main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
-    classpath = project.runtimeClasspath
-    args      = [ 'hsql' ]
 }
 
 task hibernateJpaMainC3P0(type: JavaExec) {

@@ -15,10 +15,9 @@
  */
 package com.github.lburgazzoli.sandbox.jpa.hibernate;
 
-import com.github.lburgazzoli.sandbox.jpa.hibernate.connection.HSQLConnectionProvider;
-import com.github.lburgazzoli.sandbox.jpa.hibernate.connection.HikariConnectionProvider;
 import com.google.common.collect.Maps;
 import org.hibernate.c3p0.internal.C3P0ConnectionProvider;
+import org.hibernate.hikaricp.internal.HikariCPConnectionProvider;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.slf4j.Logger;
@@ -114,22 +113,18 @@ public class HibernateJpaMain {
         props.put("hibernate.connection.provider_class" , providerClass.getName());
         props.put("hibernate.connection.autocommit"     , "false");
 
-        if(providerClass == HikariConnectionProvider.class) {
+        if(providerClass == HikariCPConnectionProvider.class) {
             props.put("hibernate.hikari.dataSourceClassName" , JDBCDataSource.class.getName());
             props.put("hibernate.hikari.dataSource.url"      , "jdbc:hsqldb:mem:hbdb");
             props.put("hibernate.hikari.dataSource.user"     , "sa");
             props.put("hibernate.hikari.dataSource.password" , "");
-        } else if(providerClass == HSQLConnectionProvider.class) {
-            props.put("hibernate.connection.url"             ,"jdbc:hsqldb:mem:hbdb");
-            props.put("hibernate.connection.username"        ,"sa");
-            props.put("hibernate.connection.password"        ,"");
         } else if(providerClass == C3P0ConnectionProvider.class) {
-            props.put("hibernate.connection.url"             ,"jdbc:hsqldb:mem:hbdb");
-            props.put("hibernate.connection.driver_class"    ,JDBCDriver.class.getName());
-            props.put("hibernate.connection.username"        ,"sa");
-            props.put("hibernate.connection.password"        ,"");
-            props.put("hibernate.c3p0.min_size"              ,"5");
-            props.put("hibernate.c3p0.max_size"              ,"10");
+            props.put("hibernate.connection.url"             , "jdbc:hsqldb:mem:hbdb");
+            props.put("hibernate.connection.driver_class"    , JDBCDriver.class.getName());
+            props.put("hibernate.connection.username"        , "sa");
+            props.put("hibernate.connection.password"        , "");
+            props.put("hibernate.c3p0.min_size"              , "5");
+            props.put("hibernate.c3p0.max_size"              , "10");
         } else {
             throw new Exception("Unknown providerClass " + providerClass.getName());
         }
@@ -148,9 +143,7 @@ public class HibernateJpaMain {
         try {
             if(args.length == 1) {
                 if("hikari".equalsIgnoreCase(args[0])) {
-                    emfProps = props(HikariConnectionProvider.class);
-                } else if("hsql".equalsIgnoreCase(args[0])) {
-                    emfProps = props(HSQLConnectionProvider.class);
+                    emfProps = props(HikariCPConnectionProvider.class);
                 } else if("c3p0".equalsIgnoreCase(args[0])) {
                     emfProps = props(C3P0ConnectionProvider.class);
                 }
