@@ -8,3 +8,7 @@ dependencies {
         exclude group:'commons-logging', module:'commons-logging'
     }
 }
+
+bootRun {
+    args = ["--path=$projectDir/conf/instance-1", "--name=app"]
+}

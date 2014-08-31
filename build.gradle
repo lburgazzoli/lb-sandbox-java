@@ -112,6 +112,7 @@ configure(allprojects) { project ->
         compile "com.goldmansachs:gs-collections:$versions.gsCollections"
 
         compile "org.codehaus.groovy:groovy-all:$versions.groovy"
+        compile "javax.inject:javax.inject:1"
 
         testCompile "junit:junit:$versions.junit"
     }
