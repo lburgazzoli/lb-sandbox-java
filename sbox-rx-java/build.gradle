@@ -1,5 +1,4 @@
 
 dependencies {
-    compile "com.netflix.rxjava:rxjava-core:$versions.rxJava"
-    compile "com.netflix.rxjava:rxjava-groovy:$versions.rxJava"
+    compile "io.reactivex:rxjava:$versions.rxJava"
 }
