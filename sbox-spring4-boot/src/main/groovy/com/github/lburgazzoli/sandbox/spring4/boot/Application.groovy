@@ -27,7 +27,7 @@ class Application {
     // *************************************************************************
 
     public static void main(String[] args) {
-        def cli = new CliBuilder(usage: 'boot -pn "server"')
+        def cli = new CliBuilder(usage: 'boot --path=path --name=name')
         cli.p(longOpt: 'path', 'path', required: true  , args: 1 )
         cli.n(longOpt: 'name', 'name', required: true  , args: 1 )
 
