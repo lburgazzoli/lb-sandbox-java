@@ -14,39 +14,24 @@
  * limitations under the License.
  */
 package com.github.lburgazzoli.sandbox.spring4.boot
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.boot.SpringApplication
-import org.springframework.core.io.FileSystemResource
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 
 class Application {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class)
+    String name
+    String description
 
-    // *************************************************************************
-    //
-    // *************************************************************************
+    public void setName(String name) {
+        this.name = name
+    }
 
-    public static void main(String[] args) {
-        def cli = new CliBuilder(usage: 'boot --path=path --name=name')
-        cli.p(longOpt: 'path', 'path', required: true  , args: 1 )
-        cli.n(longOpt: 'name', 'name', required: true  , args: 1 )
+    public void setDescription(String description) {
+        this.description = description
+    }
 
-        def opt = cli.parse(args)
-        if(opt) {
-            def ctx = SpringApplication.run(
-                [ ApplicationConfig.class,
-                  new FileSystemResource("${opt.p}/${opt.n}.groovy") ] as Object[],
-                [ "--app.name=$opt.n",
-                  "--app.path=$opt.p",
-                  "--spring.config.location=${opt.p}/${opt.n}.properties" ] as String[])
-
-            ctx.beanDefinitionNames.each {
-                LOGGER.info("bean : {} ==> {}", it, ctx.getBean(it));
-            }
-
-            ctx.close();
-        } else {
-            cli.usage()
-        }
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE)
     }
 }

@@ -9,6 +9,29 @@ dependencies {
     }
 }
 
+// *****************************************************************************
+//
+// *****************************************************************************
+
 bootRun {
-    args = ["--path=$projectDir/conf/instance-1", "--name=app"]
+    workingDir = projectDir
+    jvmArgs    = ["-Dapp.conf=$projectDir/conf/instances.groovy", "-Dapp.name=instance1"]
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+task bootInstance1(type: org.springframework.boot.gradle.run.BootRunTask ) {
+    main       = 'com.github.lburgazzoli.sandbox.spring4.boot.ApplicationMain'
+    classpath  = project.runtimeClasspath
+    workingDir = projectDir
+    jvmArgs    = ["-Dapp.conf=$projectDir/conf/instances.groovy", "-Dapp.name=instance1"]
+}
+
+task bootInstance2(type: org.springframework.boot.gradle.run.BootRunTask ) {
+    main       = 'com.github.lburgazzoli.sandbox.spring4.boot.ApplicationMain'
+    classpath  = project.runtimeClasspath
+    workingDir = projectDir
+    jvmArgs    = ["-Dapp.conf=$projectDir/conf/instances.groovy", "-Dapp.name=instance2"]
 }
