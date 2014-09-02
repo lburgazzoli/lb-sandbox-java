@@ -2,6 +2,7 @@
 apply plugin: 'spring-boot'
 
 dependencies {
+    compile "org.jolokia:jolokia-core:$versions.jolokia"
     compile "org.springframework.boot:spring-boot:$versions.springBoot"
     compile "org.springframework.boot:spring-boot-autoconfigure:$versions.springBoot"
     compile("org.springframework:spring-core:$versions.spring") {

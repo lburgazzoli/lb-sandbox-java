@@ -50,7 +50,7 @@ class ApplicationMain {
                   "--instance.path=$appPath",
                   "--spring.config.location=${appCfg}" ] as String[])
 
-            LOGGER.info("app: {} ",ctx.getBean('application'))
+            LOGGER.info("app: {} ",ctx.getBean(Application.class))
 
             ctx.close();
         } else {

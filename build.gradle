@@ -1,7 +1,15 @@
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
+        jcenter()
+
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
@@ -43,6 +51,7 @@ configure(allprojects) { project ->
         commonsPool        : '2.2',
         commonsIO          : '2.4',
         commonsCLI         : '1.2',
+        commonsLogging     : '1.2',
         spring             : '4.0.6.RELEASE',
         springDataJpa      : '1.6.1.RELEASE',
         springReactor      : '1.1.3.RELEASE',
@@ -65,7 +74,8 @@ configure(allprojects) { project ->
         javassist          : '3.18.2-GA',
         jooq               : '3.4.2',
         rxJava             : '1.0.0-rc.1',
-        osgi               : '5.0.0'
+        osgi               : '5.0.0',
+        jolokia            : '1.2.2'
     ]
 
     // *************************************************************************
@@ -84,28 +94,28 @@ configure(allprojects) { project ->
     // *************************************************************************
 
     repositories {
-        //maven { url 'file://C:/LBU/data/settings/maven_repo' }
-
         mavenLocal()
         mavenCentral()
+        jcenter()
 
-        maven { url 'http://repo.springsource.org/release' }
-        //maven { url "http://repo.springsource.org/libs-milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
     }
 
     dependencies {
         compile "org.slf4j:slf4j-api:$versions.slf4j"
         compile "org.slf4j:slf4j-ext:$versions.slf4j"
         compile "org.slf4j:jul-to-slf4j:$versions.slf4j"
-        compile "org.slf4j:jcl-over-slf4j:$versions.slf4j"
 
         compile "org.apache.logging.log4j:log4j-api:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-core:$versions.log4j2"
+        compile "org.apache.logging.log4j:log4j-jcl:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j2"
 
         compile "com.google.guava:guava:$versions.guava"
         compile "commons-io:commons-io:$versions.commonsIO"
         compile "commons-cli:commons-cli:$versions.commonsCLI"
+        compile "commons-logging:commons-logging:$versions.commonsLogging"
         compile "org.apache.commons:commons-pool2:$versions.commonsPool"
         compile "org.apache.commons:commons-lang3:$versions.commonsLang"
         compile "org.apache.commons:commons-collections4:$versions.commonsCollections"
@@ -129,7 +139,6 @@ configure(allprojects) { project ->
         "-Xlint:deprecation",
     ]
 }
-
 
 // *****************************************************************************
 //
