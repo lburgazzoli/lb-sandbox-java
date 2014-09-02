@@ -16,23 +16,28 @@
 package com.github.lburgazzoli.sandbox.spring4.boot
 
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Scope
 import org.springframework.core.env.Environment
 
 import javax.inject.Inject
 
 @Configuration
+@ComponentScan
 public class ApplicationConfig {
     @Inject
     private Environment env;
 
     @Bean
-    public String instanceName() {
-        return "instance.name=" + env.getProperty("instance.name")
+    @Scope("singleton")
+    public Application application() {
+        return new Application()
     }
 
     @Bean
-    public String instanceDescription() {
-        return "instance.description=" + env.getProperty("instance.description")
+    @Scope("singleton")
+    public ApplicationInstance applicationInstance() {
+        return new ApplicationInstance()
     }
 }

@@ -1,8 +1,12 @@
-import com.github.lburgazzoli.sandbox.spring4.boot.Application
 
 beans {
+    /*
     application(Application) {
-        name = ref('instanceName')
-        description = ref('instanceDescription')
+        appName             = environment.getProperty('info.app.name')
+        appDescription      = environment.getProperty('info.app.description')
+        appVersion          = environment.getProperty('info.app.version')
+        instanceName        = ref('instanceName')
+        instanceDescription = ref('instanceDescription')
     }
+    */
 }

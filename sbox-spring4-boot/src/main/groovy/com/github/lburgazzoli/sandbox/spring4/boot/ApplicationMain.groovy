@@ -37,28 +37,20 @@ class ApplicationMain {
             def appPath = cfg.instances."$name".path
             def appCfg  = cfg.instances."$name".conf
             def appExt  = cfg.instances."$name".ext
-            def sources = [ ApplicationConfig.class ]
+            def sources = [ ApplicationConfig.class, Application.class, ApplicationInstance.class ]
 
             if(appExt) {
                 sources += [ new FileSystemResource(appExt) ]
             }
 
-            LOGGER.info("cfg     {}", cfg)
-            LOGGER.info("appPath {}", appPath)
-            LOGGER.info("appCfg  {}", appCfg)
-            LOGGER.info("appExt  {}", appExt)
-            LOGGER.info("sources {}", sources)
-
             def ctx = SpringApplication.run(
                 sources as Object[],
-                [ "--app.cfg=$appCfg",
-                  "--app.ext=$appExt",
-                  "--app.path=$appPath",
+                [ "--instance.cfg=$appCfg",
+                  "--instance.ext=$appExt",
+                  "--instance.path=$appPath",
                   "--spring.config.location=${appCfg}" ] as String[])
 
-            ctx.beanDefinitionNames.each {
-                LOGGER.info("bean : {} ==> {}", it, ctx.getBean(it));
-            }
+            LOGGER.info("app: {} ",ctx.getBean('application'))
 
             ctx.close();
         } else {

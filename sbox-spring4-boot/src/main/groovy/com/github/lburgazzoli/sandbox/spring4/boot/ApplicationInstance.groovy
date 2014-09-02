@@ -21,18 +21,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 
-import javax.inject.Inject
-
 @Component
 @EnableConfigurationProperties
-@ConfigurationProperties(prefix="info.app")
-class Application {
+@ConfigurationProperties(prefix="instance")
+class ApplicationInstance {
     String name
     String description
-    String version
-
-    @Inject
-    ApplicationInstance instance
 
     @Override
     public String toString() {
