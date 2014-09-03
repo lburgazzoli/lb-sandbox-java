@@ -1,12 +1,18 @@
+log4j2 {
+    configuration(
+            status   : 'error',
+            name     : 'log4j2-groovy',
+            packages : 'com.github.lburgazzoli.sandbox,com.github.lburgazzoli.sandbox.log4j2') {
 
-configuration(
-    packages : "org.apache.logging.log4j,org.apache.logging.log4j.test",
-    status   : "error",
-    name     : "gog4j2") {
+        appenders {
 
-    appender(name: "app1", type: 'type1') {
-    }
+            appender(name: 'appender1', type: 'type1') {
 
-    logger(name: "logegr1", type: 'type2') {
+            }
+        }
+
+        loggers {
+
+        }
     }
 }

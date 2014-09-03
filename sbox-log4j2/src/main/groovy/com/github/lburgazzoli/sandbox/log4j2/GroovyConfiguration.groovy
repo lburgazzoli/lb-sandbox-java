@@ -15,7 +15,6 @@
  */
 package com.github.lburgazzoli.sandbox.log4j2
 
-import com.github.lburgazzoli.sandbox.log4j2.dsl.ConfigurationDsl
 import org.apache.logging.log4j.core.config.AbstractConfiguration
 import org.apache.logging.log4j.core.config.Configuration
 import org.apache.logging.log4j.core.config.ConfigurationSource
@@ -34,6 +33,7 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
     @Override
     public void setup() {
         def binding = new Binding();
+        binding.setVariable('log4j2', new GroovyConfigurationBuilder(node: rootNode))
         binding.setVariable('groovyConfig', this)
         binding.setVariable('strSubstitutor', strSubstitutor)
         binding.setVariable('pluginManager', pluginManager)
@@ -42,8 +42,7 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
                 .withStatus(defaultStatus))
 
         def shell = new GroovyShell(binding , configuration())
-        def script = (DelegatingScript)shell.parse(configurationSource.getFile())
-        script.setDelegate(new ConfigurationDsl(node: rootNode))
+        def script = shell.parse(configurationSource.getFile())
         script.setBinding(binding)
         script.run();
     }
@@ -76,7 +75,7 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
         def customizer = new ImportCustomizer()
 
         def configuration = new CompilerConfiguration()
-        configuration.scriptBaseClass = DelegatingScript.class.name
+        //configuration.scriptBaseClass = DelegatingScript.class.name
         configuration.addCompilationCustomizers(customizer)
 
         return  configuration;

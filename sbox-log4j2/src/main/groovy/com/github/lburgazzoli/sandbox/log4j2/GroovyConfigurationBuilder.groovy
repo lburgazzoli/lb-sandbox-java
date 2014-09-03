@@ -13,13 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.sandbox.log4j2.dsl
-import org.apache.logging.log4j.core.config.plugins.util.PluginManager
-import org.apache.logging.log4j.core.util.Patterns
+package com.github.lburgazzoli.sandbox.log4j2
 
-class ConfigurationDsl {
-    def node
+class GroovyConfigurationBuilder extends BuilderSupport {
+    Node rootNode
 
+    public GroovyConfigurationBuilder(Node rootNode) {
+        this.rootNode = rootNode
+    }
+
+    // *************************************************************************
+    // BuilderSupport
+    // *************************************************************************
+
+    @Override
+    protected void setParent(final Object parent, final Object child) {
+    }
+
+    @Override
+    protected Object createNode(final Object name) {
+        return createNode(name, null, null);
+    }
+
+    @Override
+    protected Object createNode(final Object name, final Object value) {
+        return createNode(name, null, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Object createNode(final Object name, final Map attributes)
+    {
+        return createNode(name, attributes, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Object createNode(final Object name,final Map attributes,final Object value)
+    {
+    }
+
+    /*
     def configuration(args, closure) {
         if(args) {
             args.each { k,v ->
@@ -56,14 +90,25 @@ class ConfigurationDsl {
                 } else if ("advertiser".equalsIgnoreCase(key)) {
                     //createAdvertiser(value, configSource, buffer, "text/xml")
                 }
-                */
             }
         }
+    }
+    */
 
-        if(closure) {
-            closure.delegate = new ItemsDsl(node: node)
-            closure.resolveStrategy = Closure.DELEGATE_FIRST
-            closure()
+
+    def methodMissing(name, args) {
+        println "methodMissing: $name"
+        /*
+        if(args) {
+            final Node childNode = new Node(node, args.name, args.type);
+            args.each { k, v ->
+                if(!"name".equalsIgnoreCase(name) && !"type".equalsIgnoreCase(name))
+                    childNode.getAttributes().put(k, v)
+            }
+
+            node.getChildren().add(childNode)
+            node = childNode
         }
+        */
     }
 }
