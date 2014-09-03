@@ -29,18 +29,21 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
 
     protected GroovyConfiguration(final ConfigurationSource configurationSource) {
         super(configurationSource)
+    }
 
+    @Override
+    public void setup() {
         def binding = new Binding();
         binding.setVariable('groovyConfig', this)
+        binding.setVariable('strSubstitutor', strSubstitutor)
         binding.setVariable('pluginManager', pluginManager)
         binding.setVariable('statusConfig', new StatusConfiguration()
-            .withVerboseClasses(ResolverUtil.class.getName())
-            .withStatus(defaultStatus))
+                .withVerboseClasses(ResolverUtil.class.getName())
+                .withStatus(defaultStatus))
 
         def shell = new GroovyShell(binding , configuration())
-        def script = shell.parse(configurationSource.getFile());
-        script.metaClass.mixin(ConfigurationDsl.class)
-        script.metaClass.getDeclaredOrigin = { script }
+        def script = (DelegatingScript)shell.parse(configurationSource.getFile())
+        script.setDelegate(new ConfigurationDsl(node: rootNode))
         script.setBinding(binding)
         script.run();
     }
@@ -55,30 +58,27 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
     // *************************************************************************
 
     private def configuration() {
+        /*
+       def core = 'ch.qos.logback.core'
+       customizer.addStarImports(core, "${core}.encoder", "${core}.read", "${core}.rolling", "${core}.status",
+               "ch.qos.logback.classic.net")
+       customizer.addImports(PatternLayoutEncoder.class.name)
+       customizer.addStaticStars(Level.class.name)
+       customizer.addStaticImport('off', Level.class.name, 'OFF')
+       customizer.addStaticImport('error', Level.class.name, 'ERROR')
+       customizer.addStaticImport('warn', Level.class.name, 'WARN')
+       customizer.addStaticImport('info', Level.class.name, 'INFO')
+       customizer.addStaticImport('debug', Level.class.name, 'DEBUG')
+       customizer.addStaticImport('trace', Level.class.name, 'TRACE')
+       customizer.addStaticImport('all', Level.class.name, 'ALL')
+       customizer
+       */
+        def customizer = new ImportCustomizer()
+
         def configuration = new CompilerConfiguration()
-        configuration.addCompilationCustomizers(importCustomizer())
+        configuration.scriptBaseClass = DelegatingScript.class.name
+        configuration.addCompilationCustomizers(customizer)
 
         return  configuration;
-    }
-
-    private def importCustomizer() {
-        def customizer = new ImportCustomizer()
-        /*
-        def core = 'ch.qos.logback.core'
-        customizer.addStarImports(core, "${core}.encoder", "${core}.read", "${core}.rolling", "${core}.status",
-                "ch.qos.logback.classic.net")
-        customizer.addImports(PatternLayoutEncoder.class.name)
-        customizer.addStaticStars(Level.class.name)
-        customizer.addStaticImport('off', Level.class.name, 'OFF')
-        customizer.addStaticImport('error', Level.class.name, 'ERROR')
-        customizer.addStaticImport('warn', Level.class.name, 'WARN')
-        customizer.addStaticImport('info', Level.class.name, 'INFO')
-        customizer.addStaticImport('debug', Level.class.name, 'DEBUG')
-        customizer.addStaticImport('trace', Level.class.name, 'TRACE')
-        customizer.addStaticImport('all', Level.class.name, 'ALL')
-        customizer
-        */
-
-        return customizer;
     }
 }

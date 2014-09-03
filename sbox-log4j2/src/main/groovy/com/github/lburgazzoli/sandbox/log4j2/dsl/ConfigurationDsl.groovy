@@ -1,7 +1,7 @@
 /*
  * Copyright 2014 lb
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -14,42 +14,54 @@
  * limitations under the License.
  */
 package com.github.lburgazzoli.sandbox.log4j2.dsl
-
-import com.github.lburgazzoli.sandbox.log4j2.GroovyConfigurationAware
 import org.apache.logging.log4j.core.config.plugins.util.PluginManager
 import org.apache.logging.log4j.core.util.Patterns
 
+class ConfigurationDsl {
+    def node
 
-class ConfigurationDsl extends GroovyConfigurationAware {
     def configuration(args, closure) {
-        if(args.packages) {
-            PluginManager.addPackages(
-                Arrays.asList(args.packages.split(Patterns.COMMA_SEPARATOR))
-            )
+        if(args) {
+            args.each { k,v ->
+                if("packages".equalsIgnoreCase(k)) {
+                    PluginManager.addPackages(Arrays.asList(v.split(Patterns.COMMA_SEPARATOR)))
+                }
+
+                /*
+                final String key   = k
+                final String value = strSubstitutor.replace(v)
+
+                if ("status".equalsIgnoreCase(key)) {
+                    statusConfig.withStatus(value)
+                } else if ("dest".equalsIgnoreCase(key)) {
+                    statusConfig..withDestination(value)
+                } else if ("shutdownHook".equalsIgnoreCase(key)) {
+                    //isShutdownHookEnabled = !"disable".equalsIgnoreCase(value)
+                } else if ("verbose".equalsIgnoreCase(key)) {
+                    statusConfig..withVerbosity(value)
+                } else if ("packages".equalsIgnoreCase(key)) {
+                    PluginManager.addPackages(Arrays.asList(value.split(Patterns.COMMA_SEPARATOR)))
+                } else if ("name".equalsIgnoreCase(key)) {
+                    //setName(value)
+                } else if ("strict".equalsIgnoreCase(key)) {
+                    //strict = Boolean.parseBoolean(value)
+                } else if ("schema".equalsIgnoreCase(key)) {
+                    //schemaResource = value
+                } else if ("monitorInterval".equalsIgnoreCase(key)) {
+                    final int interval = Integer.parseInt(value)
+
+                    if (interval > 0 && configFile != null) {
+                        monitor = new FileConfigurationMonitor(this, configFile, listeners, interval)
+                    }
+                } else if ("advertiser".equalsIgnoreCase(key)) {
+                    //createAdvertiser(value, configSource, buffer, "text/xml")
+                }
+                */
+            }
         }
 
         if(closure) {
-            closure.delegate = this;
-            closure.resolveStrategy = Closure.DELEGATE_FIRST
-            closure()
-        }
-    }
-
-    def appender(args, closure) {
-        println "appender"
-
-        if(closure) {
-            closure.delegate = this;
-            closure.resolveStrategy = Closure.DELEGATE_FIRST
-            closure()
-        }
-    }
-
-    def logger(args, closure) {
-        println "logger"
-
-        if(closure) {
-            closure.delegate = this;
+            closure.delegate = new ItemsDsl(node: node)
             closure.resolveStrategy = Closure.DELEGATE_FIRST
             closure()
         }

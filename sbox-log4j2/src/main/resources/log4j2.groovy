@@ -4,9 +4,9 @@ configuration(
     status   : "error",
     name     : "gog4j2") {
 
-    appender(name  : "app1") {
+    appender(name: "app1", type: 'type1') {
     }
 
-    logger(name : "logegr1") {
+    logger(name: "logegr1", type: 'type2') {
     }
 }

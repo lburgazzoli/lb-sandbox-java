@@ -15,26 +15,22 @@
  */
 package com.github.lburgazzoli.sandbox.log4j2.dsl
 
-import com.github.lburgazzoli.sandbox.log4j2.GroovyConfigurationAware
+class ItemsDsl  {
+    def node
 
-class ItemsDsl extends GroovyConfigurationAware {
-    def appender(args, closure) {
-        println "appender"
+    def methodMissing(name, args) {
+        println "methodMissing: $name"
+        /*
+        if(args) {
+            final Node childNode = new Node(node, args.name, args.type);
+            args.each { k, v ->
+                if(!"name".equalsIgnoreCase(name) && !"type".equalsIgnoreCase(name))
+                    childNode.getAttributes().put(k, v)
+            }
 
-        if(closure) {
-            closure.delegate = this;
-            closure.resolveStrategy = Closure.DELEGATE_FIRST
-            closure()
+            node.getChildren().add(childNode)
+            node = childNode
         }
-    }
-
-    def logger(args, closure) {
-        println "logger"
-
-        if(closure) {
-            closure.delegate = this;
-            closure.resolveStrategy = Closure.DELEGATE_FIRST
-            closure()
-        }
+        */
     }
 }
