@@ -13,45 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.sandbox.log4j2
+package com.github.lburgazzoli.sandbox.log4j2.dsl
 
-class GroovyConfigurationBuilder extends BuilderSupport {
+import org.apache.logging.log4j.core.config.Node
+
+class ConfigurationDsl {
     Node rootNode
 
-    public GroovyConfigurationBuilder(Node rootNode) {
+    def ConfigurationDsl(final Node rootNode) {
         this.rootNode = rootNode
     }
 
-    // *************************************************************************
-    // BuilderSupport
-    // *************************************************************************
-
-    @Override
-    protected void setParent(final Object parent, final Object child) {
+    def configuration(Map<String,String> args, Closure c) {
+        args.each {
+            k,v -> node.attributes.put(k,v)
+        }
     }
 
-    @Override
-    protected Object createNode(final Object name) {
-        return createNode(name, null, null);
+    /*
+    def ___methodMissing(String methodName, args) {
+        if("configuration".equalsIgnoreCase(methodName)) {
+            println "$methodName"
+            println "$args"
+
+            if(args) {
+                args.each {
+                    if(it instanceof Map) {
+                        processAttributes(rootNode, it)
+                    }
+                }
+            }
+        }
     }
 
-    @Override
-    protected Object createNode(final Object name, final Object value) {
-        return createNode(name, null, value);
+    def ___findClosure(args) {
+        if(args) {
+            args.each {
+
+            }
+        }
+
+        return null
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Object createNode(final Object name, final Map attributes)
-    {
-        return createNode(name, attributes, null);
+    def ___processAttributes(node, args) {
+        if(args) {
+            args.each {
+                k,v -> node.attributes.put(k,v)
+            }
+        }
     }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Object createNode(final Object name,final Map attributes,final Object value)
-    {
-    }
+    */
 
     /*
     def configuration(args, closure) {
@@ -95,20 +107,4 @@ class GroovyConfigurationBuilder extends BuilderSupport {
     }
     */
 
-
-    def methodMissing(name, args) {
-        println "methodMissing: $name"
-        /*
-        if(args) {
-            final Node childNode = new Node(node, args.name, args.type);
-            args.each { k, v ->
-                if(!"name".equalsIgnoreCase(name) && !"type".equalsIgnoreCase(name))
-                    childNode.getAttributes().put(k, v)
-            }
-
-            node.getChildren().add(childNode)
-            node = childNode
-        }
-        */
-    }
 }

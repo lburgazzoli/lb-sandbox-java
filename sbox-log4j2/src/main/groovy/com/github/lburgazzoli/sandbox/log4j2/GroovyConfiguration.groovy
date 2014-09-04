@@ -15,6 +15,7 @@
  */
 package com.github.lburgazzoli.sandbox.log4j2
 
+import com.github.lburgazzoli.sandbox.log4j2.dsl.ConfigurationDsl
 import org.apache.logging.log4j.core.config.AbstractConfiguration
 import org.apache.logging.log4j.core.config.Configuration
 import org.apache.logging.log4j.core.config.ConfigurationSource
@@ -33,51 +34,41 @@ public class GroovyConfiguration extends AbstractConfiguration implements Reconf
     @Override
     public void setup() {
         def binding = new Binding();
-        binding.setVariable('log4j2', new GroovyConfigurationBuilder(node: rootNode))
         binding.setVariable('groovyConfig', this)
         binding.setVariable('strSubstitutor', strSubstitutor)
         binding.setVariable('pluginManager', pluginManager)
         binding.setVariable('statusConfig', new StatusConfiguration()
                 .withVerboseClasses(ResolverUtil.class.getName())
                 .withStatus(defaultStatus))
+        /*
+        def core = 'ch.qos.logback.core'
+        customizer.addStarImports(core, "${core}.encoder", "${core}.read", "${core}.rolling", "${core}.status",
+               "ch.qos.logback.classic.net")
+        customizer.addImports(PatternLayoutEncoder.class.name)
+        customizer.addStaticStars(Level.class.name)
+        customizer.addStaticImport('off', Level.class.name, 'OFF')
+        customizer.addStaticImport('error', Level.class.name, 'ERROR')
+        customizer.addStaticImport('warn', Level.class.name, 'WARN')
+        customizer.addStaticImport('info', Level.class.name, 'INFO')
+        customizer.addStaticImport('debug', Level.class.name, 'DEBUG')
+        customizer.addStaticImport('trace', Level.class.name, 'TRACE')
+        customizer.addStaticImport('all', Level.class.name, 'ALL')
+        customizer
+        */
+        def customizer = new ImportCustomizer()
 
-        def shell = new GroovyShell(binding , configuration())
-        def script = shell.parse(configurationSource.getFile())
-        script.setBinding(binding)
+        def compiler = new CompilerConfiguration()
+        compiler.scriptBaseClass = DelegatingScript.class.name
+        compiler.addCompilationCustomizers(customizer)
+
+        def shell = new GroovyShell(binding , compiler)
+        def script = (DelegatingScript)shell.parse(configurationSource.getFile())
+        script.setDelegate(new ConfigurationDsl(rootNode))
         script.run();
     }
 
     @Override
     public Configuration reconfigure() {
         return null
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    private def configuration() {
-        /*
-       def core = 'ch.qos.logback.core'
-       customizer.addStarImports(core, "${core}.encoder", "${core}.read", "${core}.rolling", "${core}.status",
-               "ch.qos.logback.classic.net")
-       customizer.addImports(PatternLayoutEncoder.class.name)
-       customizer.addStaticStars(Level.class.name)
-       customizer.addStaticImport('off', Level.class.name, 'OFF')
-       customizer.addStaticImport('error', Level.class.name, 'ERROR')
-       customizer.addStaticImport('warn', Level.class.name, 'WARN')
-       customizer.addStaticImport('info', Level.class.name, 'INFO')
-       customizer.addStaticImport('debug', Level.class.name, 'DEBUG')
-       customizer.addStaticImport('trace', Level.class.name, 'TRACE')
-       customizer.addStaticImport('all', Level.class.name, 'ALL')
-       customizer
-       */
-        def customizer = new ImportCustomizer()
-
-        def configuration = new CompilerConfiguration()
-        //configuration.scriptBaseClass = DelegatingScript.class.name
-        configuration.addCompilationCustomizers(customizer)
-
-        return  configuration;
     }
 }
