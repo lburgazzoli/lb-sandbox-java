@@ -14,7 +14,7 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-6'
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE'
     }
 }
 
@@ -52,11 +52,11 @@ configure(allprojects) { project ->
         commonsIO          : '2.4',
         commonsCLI         : '1.2',
         commonsLogging     : '1.2',
-        spring             : '4.0.6.RELEASE',
-        springDataJpa      : '1.6.1.RELEASE',
-        springReactor      : '1.1.3.RELEASE',
+        spring             : '4.1.0.RELEASE',
+        springDataJpa      : '1.6.4.RELEASE',
+        springReactor      : '1.1.4.RELEASE',
         springIntegration  : '4.0.3.RELEASE',
-        springBoot         : '1.1.5.RELEASE',
+        springBoot         : '1.1.6.RELEASE',
         hibernate          : '4.3.6.Final',
         hikaricp           : '2.0.1',
         hsqldb             : '2.3.2',
@@ -67,15 +67,23 @@ configure(allprojects) { project ->
         disruptor          : '3.3.0',
         groovy             : '2.3.6',
         gsCollections      : '5.1.0',
-        camel              : '2.12.3',
+        camel              : '2.13.2',
         batoo              : '2.0.1.3_1-SNAPSHOT',
         bonecp             : '0.8.0.RELEASE',
         openjpa            : '2.3.0',
         javassist          : '3.18.2-GA',
         jooq               : '3.4.2',
-        rxJava             : '1.0.0-rc.1',
+        rxJava             : '1.0.0-rc.2',
         osgi               : '5.0.0',
-        jolokia            : '1.2.2'
+        jolokia            : '1.2.2',
+	jcTools            : '1.0',
+	hftlang            : '6.4.6',
+	hftChronicle       : '3.2.1',
+	hftChronicleLog    : '1.0.0',
+	hftChronicleMap    : '1.0.2',
+	hftCollections     : '3.2.1',
+	hftAffinity        : '2.1.1',
+	hftCompiler        : '2.2.0'
     ]
 
     // *************************************************************************
@@ -122,6 +130,7 @@ configure(allprojects) { project ->
         compile "com.goldmansachs:gs-collections:$versions.gsCollections"
 
         compile "org.codehaus.groovy:groovy-all:$versions.groovy"
+        compile "org.jctools:jctools-core:$versions.jcTools"
         compile "javax.inject:javax.inject:1"
 
         testCompile "junit:junit:$versions.junit"
