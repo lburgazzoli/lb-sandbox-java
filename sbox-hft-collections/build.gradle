@@ -1,5 +1,0 @@
-
-dependencies {
-    compile "net.openhft:collections:$versions.hftCollections"
-}
-
