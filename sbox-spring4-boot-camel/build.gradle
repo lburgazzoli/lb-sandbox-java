@@ -1,0 +1,29 @@
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile "org.apache.camel:camel-core:$versions.camel"
+    compile "org.apache.camel:camel-spring:$versions.camel"
+    compile "org.apache.camel:camel-spring-javaconfig:$versions.camel"
+    compile "org.apache.camel:camel-groovy:$versions.camel"
+    compile "com.fasterxml.jackson.core:jackson-core:$versions.jacksonCore"
+    compile "com.fasterxml.jackson.core:jackson-databind:$versions.jacksonDatabind"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner:$versions.jackson"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$versions.jackson"
+    compile "org.jolokia:jolokia-core:$versions.jolokia"
+    compile "org.springframework.boot:spring-boot:$versions.springBoot"
+    compile "org.springframework.boot:spring-boot-autoconfigure:$versions.springBoot"
+    compile "org.springframework.boot:spring-boot-actuator:$versions.springBoot"
+    compile("org.springframework:spring-core:$versions.spring") {
+        exclude group:'commons-logging', module:'commons-logging'
+    }
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+bootRun {
+    workingDir = projectDir
+}

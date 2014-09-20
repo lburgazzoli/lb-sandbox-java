@@ -13,8 +13,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-6'
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.0.M1'
     }
 }
 
@@ -56,7 +56,7 @@ configure(allprojects) { project ->
         springDataJpa      : '1.6.4.RELEASE',
         springReactor      : '1.1.4.RELEASE',
         springIntegration  : '4.0.3.RELEASE',
-        springBoot         : '1.1.6.RELEASE',
+        springBoot         : '1.2.0.M1',
         hibernate          : '4.3.6.Final',
         hikaricp           : '2.0.1',
         hsqldb             : '2.3.2',
@@ -67,7 +67,7 @@ configure(allprojects) { project ->
         disruptor          : '3.3.0',
         groovy             : '2.3.6',
         gsCollections      : '5.1.0',
-        camel              : '2.13.2',
+        camel              : '2.14.0',
         batoo              : '2.0.1.3_1-SNAPSHOT',
         bonecp             : '0.8.0.RELEASE',
         openjpa            : '2.3.0',
@@ -76,14 +76,14 @@ configure(allprojects) { project ->
         rxJava             : '1.0.0-rc.2',
         osgi               : '5.0.0',
         jolokia            : '1.2.2',
-	jcTools            : '1.0',
-	hftlang            : '6.4.6',
-	hftChronicle       : '3.2.1',
-	hftChronicleLog    : '1.0.0',
-	hftChronicleMap    : '1.0.2',
-	hftCollections     : '3.2.1',
-	hftAffinity        : '2.1.1',
-	hftCompiler        : '2.2.0'
+	    jcTools            : '1.0',
+	    hftlang            : '6.4.6',
+	    hftChronicle       : '3.2.1',
+	    hftChronicleLog    : '1.0.0',
+	    hftChronicleMap    : '1.0.2',
+	    hftCollections     : '3.2.1',
+	    hftAffinity        : '2.1.1',
+	    hftCompiler        : '2.2.0'
     ]
 
     // *************************************************************************
@@ -154,5 +154,5 @@ configure(allprojects) { project ->
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.1'
 }
