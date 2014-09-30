@@ -44,7 +44,7 @@ configure(allprojects) { project ->
         jacksonDatabind    : '2.4.2',
         jacksonSmile       : '2.4.2',
         jacksonBson        : '2.4.0',
-        hazelcast          : '3.2.3',
+        hazelcast          : '3.3.1',
         guava              : '18.0',
         commonsLang        : '3.3.2',
         commonsCollections : '4.0',
