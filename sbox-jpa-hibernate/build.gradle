@@ -21,10 +21,12 @@ task hibernateJpaMainHikari(type: JavaExec) {
     main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
     classpath = project.runtimeClasspath
     args      = [ 'hikari' ]
+    jvmArgs   = [ '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
 }
 
 task hibernateJpaMainC3P0(type: JavaExec) {
     main      = 'com.github.lburgazzoli.sandbox.jpa.hibernate.HibernateJpaMain'
     classpath = project.runtimeClasspath
     args      = [ 'c3p0' ]
+    jvmArgs   = [ '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
 }

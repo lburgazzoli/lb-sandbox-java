@@ -15,4 +15,5 @@ run {
     workingDir = "$projectDir"
     classpath  = project.runtimeClasspath
     args       = [ "$projectDir/conf/hz/hz-cfg.groovy" ]
+    jvmArgs    = [ '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
 }

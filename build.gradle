@@ -1,6 +1,6 @@
 
 // *****************************************************************************
-//
+// -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
 // *****************************************************************************
 
 buildscript {
@@ -37,12 +37,11 @@ configure(allprojects) { project ->
 
     project.ext.versions = [
         slf4j              : '1.7.7',
-        logback            : '1.1.2',
-        log4j2             : '2.0.2',
-        jackson            : '2.4.2',
-        jacksonCore        : '2.4.2',
-        jacksonDatabind    : '2.4.2',
-        jacksonSmile       : '2.4.2',
+        log4j2             : '2.1',
+        jackson            : '2.4.3',
+        jacksonCore        : '2.4.3',
+        jacksonDatabind    : '2.4.3',
+        jacksonSmile       : '2.4.3',
         jacksonBson        : '2.4.0',
         hazelcast          : '3.3.1',
         guava              : '18.0',
@@ -54,36 +53,36 @@ configure(allprojects) { project ->
         commonsLogging     : '1.2',
         spring             : '4.1.0.RELEASE',
         springDataJpa      : '1.6.4.RELEASE',
-        springReactor      : '1.1.4.RELEASE',
+        springReactor      : '1.1.5.RELEASE',
         springIntegration  : '4.0.3.RELEASE',
-        springBoot         : '1.2.0.M1',
+        springBoot         : '1.2.0.M2',
         hibernate          : '4.3.6.Final',
-        hikaricp           : '2.0.1',
+        hikaricp           : '2.1.0',
         hsqldb             : '2.3.2',
         h2                 : '1.4.178',
         netty              : '4.0.21.Final',
         junit              : '4.11',
         kryo               : '2.24.0',
         disruptor          : '3.3.0',
-        groovy             : '2.3.6',
+        groovy             : '2.3.7',
         gsCollections      : '5.1.0',
         camel              : '2.14.0',
         batoo              : '2.0.1.3_1-SNAPSHOT',
         bonecp             : '0.8.0.RELEASE',
         openjpa            : '2.3.0',
         javassist          : '3.18.2-GA',
-        jooq               : '3.4.2',
-        rxJava             : '1.0.0-rc.2',
+        jooq               : '3.4.4',
+        rxJava             : '1.0.0-rc.8',
         osgi               : '5.0.0',
         jolokia            : '1.2.2',
-	    jcTools            : '1.0',
-	    hftlang            : '6.4.6',
-	    hftChronicle       : '3.2.1',
-	    hftChronicleLog    : '1.0.0',
-	    hftChronicleMap    : '1.0.2',
-	    hftCollections     : '3.2.1',
-	    hftAffinity        : '2.1.1',
-	    hftCompiler        : '2.2.0'
+	jcTools            : '1.0',
+	hftlang            : '6.4.10',
+	hftChronicleQueue  : '3.2.5',
+	hftChronicleLog    : '1.0.2',
+	hftChronicleMap    : '2.0.4a',
+	hftCollections     : '3.2.2',
+	hftAffinity        : '2.1.2',
+	hftCompiler        : '2.2.0'
     ]
 
     // *************************************************************************
@@ -113,11 +112,11 @@ configure(allprojects) { project ->
     dependencies {
         compile "org.slf4j:slf4j-api:$versions.slf4j"
         compile "org.slf4j:slf4j-ext:$versions.slf4j"
-        compile "org.slf4j:jul-to-slf4j:$versions.slf4j"
 
         compile "org.apache.logging.log4j:log4j-api:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-core:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-jcl:$versions.log4j2"
+        compile "org.apache.logging.log4j:log4j-jul:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j2"
 
         compile "com.google.guava:guava:$versions.guava"
