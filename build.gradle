@@ -57,10 +57,10 @@ configure(allprojects) { project ->
         springIntegration  : '4.0.3.RELEASE',
         springBoot         : '1.2.0.M2',
         hibernate          : '4.3.6.Final',
-        hikaricp           : '2.1.0',
+        hikaricp           : '2.2.4',
         hsqldb             : '2.3.2',
         h2                 : '1.4.178',
-        netty              : '4.0.21.Final',
+        netty              : '4.0.24.Final',
         junit              : '4.11',
         kryo               : '2.24.0',
         disruptor          : '3.3.0',
@@ -153,5 +153,5 @@ configure(allprojects) { project ->
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+    gradleVersion = '2.2'
 }
