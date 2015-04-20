@@ -12,7 +12,7 @@ dependencies {
 
 task jooqCodeGen(type: JavaExec) {
     main       = 'com.github.lburgazzoli.sandbox.jooq.JooqCodeGen'
-    classpath  = project.runtimeClasspath
+    classpath  = sourceSets.main.runtimeClasspath
     workingDir = "$projectDir"
     args       = [ "$projectDir/src/main/resources/jooq-config.groovy" ]
     jvmArgs    = [ '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
@@ -20,7 +20,7 @@ task jooqCodeGen(type: JavaExec) {
 
 task jooqMain(type: JavaExec) {
     main       = 'com.github.lburgazzoli.sandbox.jooq.JooqMain'
-    classpath  = project.runtimeClasspath
+    classpath  = sourceSets.main.runtimeClasspath
     workingDir = "$projectDir"
     args       = [ "$projectDir/src/main/resources/jooq-config.groovy" ]
     jvmArgs    = [ '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]

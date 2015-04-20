@@ -12,8 +12,8 @@ buildscript {
         maven { url "http://repo.spring.io/milestone" }
     }
     dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.6'
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RELEASE'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.8'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE'
     }
 }
 
@@ -21,67 +21,82 @@ buildscript {
 //
 // *****************************************************************************
 
-configure(allprojects) { project ->
+subprojects {
 
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'maven'
     apply plugin: 'idea'
     apply plugin: 'com.github.ben-manes.versions'
+    apply plugin: 'osgi'
 
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
     version             = '1.0.0.SNAPSHOT'
     group               = 'com.github.lburgazzoli'
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
 
-    project.ext.versions = [
-        slf4j              : '1.7.10',
-        log4j2             : '2.1',
-        jackson            : '2.5.0',
-        jacksonCore        : '2.5.0',
-        jacksonDatabind    : '2.5.0',
-        jacksonSmile       : '2.5.0',
-        jacksonBson        : '2.5.0',
-        hazelcast          : '3.4',
-        guava              : '18.0',
-        commonsLang        : '3.3.2',
-        commonsCollections : '4.0',
-        commonsPool        : '2.2',
-        commonsIO          : '2.4',
-        commonsCLI         : '1.2',
-        commonsLogging     : '1.2',
-        spring             : '4.1.3.RELEASE',
-        springDataJpa      : '1.6.4.RELEASE',
-        springReactor      : '1.1.5.RELEASE',
-        springIntegration  : '4.0.4.RELEASE',
-        springBoot         : '1.2.1.RELEASE',
-        hibernate          : '4.3.7.Final',
-        hikaricp           : '2.2.5',
-        hsqldb             : '2.3.2',
-        h2                 : '1.4.178',
-        netty              : '4.0.24.Final',
-        junit              : '4.12',
-        kryo               : '2.24.0',
-        disruptor          : '3.3.0',
-        groovy             : '2.3.8',
-        gsCollections      : '5.1.0',
-        camel              : '2.14.0',
-        batoo              : '2.0.1.3_1-SNAPSHOT',
-        bonecp             : '0.8.0.RELEASE',
-        openjpa            : '2.3.0',
-        javassist          : '3.18.2-GA',
-        jooq               : '3.0.0',
-        rxJava             : '1.0.2',
-        osgi               : '5.0.0',
-        jolokia            : '1.2.3',
-	jcTools            : '1.0',
-	hftlang            : '6.4.21',
-	hftChronicleQueue  : '3.3.4',
-	hftChronicleLog    : '1.0.2',
-	hftChronicleMap    : '2.0.4a',
-	hftAffinity        : '2.1.6',
-	hftCompiler        : '2.2.0'
-    ]
+    project.ext {
+        gradleVersion       = '2.3'
+        isReleaseVersion    = !version.endsWith("SNAPSHOT")
+        gitRoot             = "https://github.com/lburgazzoli"
+        gitProject          = "https://github.com/lburgazzoli/lb-sandbox-java"
+        deploySnapshot      = "https://oss.sonatype.org/content/repositories/snapshots"
+        gradleScriptDir     = "${rootProject.projectDir}/gradle"
+        osgiVersion         = project.version.replaceAll('-','.')
+
+        versions = [
+            slf4j               : '1.7.12',
+            log4j2              : '2.2',
+            jackson             : '2.5.2',
+            jacksonCore         : '2.5.2',
+            jacksonDatabind     : '2.5.2',
+            jacksonSmile        : '2.5.2',
+            jacksonBson         : '2.5.2',
+            hazelcast           : '3.4.2',
+            guava               : '18.0',
+            commonsLang         : '3.4',
+            commonsCollections  : '4.0',
+            commonsPool         : '2.3',
+            commonsIO           : '2.4',
+            commonsCLI          : '1.2',
+            commonsLogging      : '1.2',
+            spring              : '4.1.6.RELEASE',
+            springDataJpa       : '1.6.4.RELEASE',
+            springReactor       : '1.1.5.RELEASE',
+            springIntegration   : '4.1.3.RELEASE',
+            springBoot          : '1.2.3.RELEASE',
+            hibernate           : '4.3.7.Final',
+            hikaricp            : '2.3.6',
+            hsqldb              : '2.3.2',
+            h2                  : '1.4.187',
+            netty               : '4.0.27.Final',
+            junit               : '4.12',
+            kryo                : '2.24.0',
+            disruptor           : '3.3.0',
+            groovy              : '2.4.3',
+            gsCollections       : '6.1.0',
+            camel               : '2.15.1',
+            batoo               : '2.0.1.3_1-SNAPSHOT',
+            bonecp              : '0.8.0.RELEASE',
+            openjpa             : '2.3.0',
+            javassist           : '3.18.2-GA',
+            jooq                : '3.5.4',
+            rxJava              : '1.0.9',
+            osgi                : '5.0.0',
+            jolokia             : '1.2.3',
+            jcTools             : '1.0',
+            hftlang             : '6.4.21',
+            hftChronicleQueue   : '3.3.4',
+            hftChronicleLog     : '1.0.2',
+            hftChronicleMap     : '2.0.4a',
+            hftAffinity         : '2.1.6',
+            hftCompiler         : '2.2.0',
+            felixConfigAdmin    : '1.8.2',
+            felixScr            : '1.8.2',
+            felixScrAnnotations : '1.9.10',
+            karaf               : '3.0.3'
+        ]
+    }
 
     // *************************************************************************
     //
@@ -108,8 +123,8 @@ configure(allprojects) { project ->
     }
 
     dependencies {
-        compile "org.slf4j:slf4j-api:$versions.slf4j"
-        compile "org.slf4j:slf4j-ext:$versions.slf4j"
+        compile("org.slf4j:slf4j-api:$versions.slf4j") { transitive = false }
+        compile("org.slf4j:slf4j-ext:$versions.slf4j") { transitive = false }
 
         compile "org.apache.logging.log4j:log4j-api:$versions.log4j2"
         compile "org.apache.logging.log4j:log4j-core:$versions.log4j2"
@@ -133,11 +148,32 @@ configure(allprojects) { project ->
         testCompile "junit:junit:$versions.junit"
     }
 
+    jar {
+        baseName = "${project.name}"
+
+        manifest.attributes['Bundle-Description'     ] = "${project.name}"
+        manifest.attributes['Bundle-Name'            ] = "${project.name}"
+        manifest.attributes['Bundle-SymbolicName'    ] = "${project.group}-${project.name}"
+        manifest.attributes['Bundle-Version'         ] = osgiVersion
+        manifest.attributes['Implementation-Title'   ] = "${project.group}-${project.name}-${osgiVersion}"
+        manifest.attributes['Implementation-Version' ] = osgiVersion
+        manifest.attributes['Implementation-Vendor'  ] = 'lb'
+    }
+
+
     test {
         testLogging {
             events          'failed'
             exceptionFormat 'full'
         }
+    }
+    
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    dependencyUpdates {
+        revision = 'release'
     }
 
     [compileJava, compileTestJava]*.options*.compilerArgs = [
@@ -151,5 +187,5 @@ configure(allprojects) { project ->
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = "$gradleVersion"
 }

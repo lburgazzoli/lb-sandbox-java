@@ -31,14 +31,14 @@ bootRun {
 
 task bootInstance1(type: org.springframework.boot.gradle.run.BootRunTask ) {
     main       = 'com.github.lburgazzoli.sandbox.spring4.boot.ApplicationMain'
-    classpath  = project.runtimeClasspath
+    classpath  = sourceSets.main.runtimeClasspath
     workingDir = projectDir
     jvmArgs    = [ "-Dapp.conf=$projectDir/conf/instances.groovy", "-Dapp.name=instance1", '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
 }
 
 task bootInstance2(type: org.springframework.boot.gradle.run.BootRunTask ) {
     main       = 'com.github.lburgazzoli.sandbox.spring4.boot.ApplicationMain'
-    classpath  = project.runtimeClasspath
+    classpath  = sourceSets.main.runtimeClasspath
     workingDir = projectDir
     jvmArgs    = [ "-Dapp.conf=$projectDir/conf/instances.groovy", "-Dapp.name=instance2", '-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager' ]
 }
