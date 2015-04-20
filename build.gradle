@@ -94,7 +94,9 @@ subprojects {
             felixConfigAdmin    : '1.8.2',
             felixScr            : '1.8.2',
             felixScrAnnotations : '1.9.10',
-            karaf               : '3.0.3'
+            karaf               : '3.0.3',
+            bnd                 : '2.4.0',
+            bndAnnotation       : '2.4.0'
         ]
     }
 

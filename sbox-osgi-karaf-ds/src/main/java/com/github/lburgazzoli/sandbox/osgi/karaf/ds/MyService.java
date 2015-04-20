@@ -13,4 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.sandbox.osgi.karaf.scr;
+package com.github.lburgazzoli.sandbox.osgi.karaf.ds;
+
+public interface MyService {
+}

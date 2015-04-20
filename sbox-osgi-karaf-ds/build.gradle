@@ -2,10 +2,14 @@
 
 dependencies {
     compile "org.apache.felix:org.apache.felix.configadmin:$versions.felixConfigAdmin"
-    //compile "org.apache.felix:org.apache.felix.scr.annotations:$versions.felixScrAnnotations"
     compile "org.apache.karaf.shell:org.apache.karaf.shell.console:$versions.karaf"
     compile "org.apache.karaf.shell:org.apache.karaf.shell.table:$versions.karaf"
     compile "org.osgi:org.osgi.core:$versions.osgi"
     compile "org.osgi:org.osgi.compendium:$versions.osgi"
+    compile "biz.aQute.bnd:biz.aQute.bnd.annotation:$versions.bndAnnotation"
 }
 
+
+jar {
+    manifest.attributes['Service-Component'     ] = "OSGI-INF/myservice.xml"
+}
